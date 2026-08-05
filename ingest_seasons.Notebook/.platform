@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "ingest_seasons"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "faf57dfb-2577-9602-4d90-4e1aa0dae5e0"
+  }
+}
