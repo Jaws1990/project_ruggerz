@@ -36,8 +36,10 @@
 from notebookutils import mssparkutils
 from datetime import datetime
 from pyspark.sql.functions import explode
+variable_library = notebookutils.variableLibrary.getLibrary("PR_variables")
 mssparkutils.fs.mounts()
 
+
 # METADATA ********************
 
 # META {
@@ -47,14 +49,36 @@ mssparkutils.fs.mounts()
 
 # CELL ********************
 
-ENDPOINT = "seasons"
-ENTITY = "seasons"
+#Get a list of Leagues we want to get data for. 
+
+league_ids = (
+    spark.read.format("csv")
+    .option("header","true")
+    .load("Files/LeagueList.csv")
+    .collect()
+)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+ENDPOINT = "teams"
+ENTITY = "teams"
 DATESTAMP = datetime.now().strftime("%Y%m%d")
 FILENAME = f"{ENTITY}.json"
-OUTPUT_PATH = f"Files/raw/{ENTITY}/{DATESTAMP}"
+SEASON = variable_library.getVariable("season")
+
 
 ingestor = APIIngestor()
-ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
+for league in league_ids:
+    league_name = league["name"]
+    output_path = f"Files/raw/{ENTITY}/{DATESTAMP}/{league_name}"
+    ingestor.download_json(ENDPOINT, output_path, FILENAME, query_params={"league":league["id"],"season":SEASON})
 
 # METADATA ********************
 
@@ -65,15 +89,15 @@ ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
 
 # CELL ********************
 
-raw_df = spark.read.option("multiline", "true").json(f"{OUTPUT_PATH}/{FILENAME}")
+raw_df = spark.read.option("multiline", "true").json(f"Files/raw/{ENTITY}/{DATESTAMP}/*/*.json")
 bronze_df = (
-    raw_df.withColumn("season",explode(col("response")))
-    .select("season")
+    raw_df.withColumn("response",explode(col("response")))
+    .select("response.*")
 )
 
 display(bronze_df.take(5))
 
-ingestor.write_to_bronze_table(df=bronze_df,table_name=ENTITY,mode="overwrite")
+ingestor.write_to_bronze_table(df=bronze_df,table_name=ENTITY,mode="append")
 
 # METADATA ********************
 

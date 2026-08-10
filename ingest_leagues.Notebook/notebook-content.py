@@ -47,8 +47,8 @@ mssparkutils.fs.mounts()
 
 # CELL ********************
 
-ENDPOINT = "seasons"
-ENTITY = "seasons"
+ENDPOINT = "leagues"
+ENTITY = "leagues"
 DATESTAMP = datetime.now().strftime("%Y%m%d")
 FILENAME = f"{ENTITY}.json"
 OUTPUT_PATH = f"Files/raw/{ENTITY}/{DATESTAMP}"
@@ -67,13 +67,13 @@ ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
 
 raw_df = spark.read.option("multiline", "true").json(f"{OUTPUT_PATH}/{FILENAME}")
 bronze_df = (
-    raw_df.withColumn("season",explode(col("response")))
-    .select("season")
+    raw_df.withColumn("response",explode(col("response")))
+    .select("response.*")
 )
 
 display(bronze_df.take(5))
 
-ingestor.write_to_bronze_table(df=bronze_df,table_name=ENTITY,mode="overwrite")
+df=bronze_df,table_name=ENTITY,mode="append"
 
 # METADATA ********************
 
