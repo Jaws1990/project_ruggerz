@@ -31,9 +31,9 @@ class APIIngestor:
     def fetch_data(self, api_url, query_params=None):
         headers = {'x-apisports-key': f"{self.api_key}"}
         response = requests.get(api_url, headers=headers, params=query_params)
-        print(f"Attempting extract of data from {api_url}.")
+        print(f"Attempting extract of data from {api_url}."
+                + (f" With query params {query_params}" if query_params is not None else ""))
         if response.status_code == 200:
-            print(json.dumps(response.json()))
             return response.json()
         else:
             response.raise_for_status()
@@ -85,7 +85,8 @@ class APIIngestor:
                 Defaults to "overwrite".
 
             merge_condition (str, optional):
-                Delta merge condition used when mode is "merge".
+                Delta merge condition used when mode is "merge". 
+                Dataframe alias = "source", delta table alias = "target".
                 For example:
                     "target.team_id = source.team_id"
 
@@ -123,18 +124,23 @@ class APIIngestor:
         table_path = f"bronze.{table_name}"
 
         if mode == "merge":
-            delta_table = DeltaTable.forName(self.spark, table_path)
-            (
-                delta_table.alias("target")
-                .merge(
-                    enriched.alias("source"),
-                    merge_condition
+            if spark.catalog.tableExists("table_path"):
+                delta_table = DeltaTable.forName(spark, table_path)
+                (
+                    delta_table.alias("target")
+                    .merge(
+                        enriched.alias("source"),
+                        merge_condition
+                    )
+                    .whenMatchedUpdateAll()
+                    .whenNotMatchedInsertAll()
+                    .execute()
                 )
-                .whenMatchedUpdateAll()
-                .whenNotMatchedInsertAll()
-                .execute()
-            )
-        else:
+                return
+            else:
+                #change to overwrite if the table doesnt exist yet
+                mode = "overwrite"
+        if mode in ["overwrite","append"]:
             (
                 enriched.write
                 .format("delta")
@@ -142,6 +148,10 @@ class APIIngestor:
                 .option(
                     "overwriteSchema",
                     "true" if mode == "overwrite" else "false"
+                )
+                .option(
+                    "mergeSchema",
+                    "true" if mode == "append" else "false"
                 )
                 .saveAsTable(table_path)
             )

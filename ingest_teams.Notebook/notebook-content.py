@@ -36,6 +36,7 @@
 from notebookutils import mssparkutils
 from datetime import datetime
 from pyspark.sql.functions import explode
+from time import sleep
 variable_library = notebookutils.variableLibrary.getLibrary("PR_variables")
 mssparkutils.fs.mounts()
 
@@ -72,13 +73,23 @@ ENTITY = "teams"
 DATESTAMP = datetime.now().strftime("%Y%m%d")
 FILENAME = f"{ENTITY}.json"
 SEASON = variable_library.getVariable("season")
-
-
 ingestor = APIIngestor()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 for league in league_ids:
     league_name = league["name"]
     output_path = f"Files/raw/{ENTITY}/{DATESTAMP}/{league_name}"
     ingestor.download_json(ENDPOINT, output_path, FILENAME, query_params={"league":league["id"],"season":SEASON})
+    #pause so we dont go over request per minute limit
+    sleep(7)
 
 # METADATA ********************
 
@@ -90,14 +101,17 @@ for league in league_ids:
 # CELL ********************
 
 raw_df = spark.read.option("multiline", "true").json(f"Files/raw/{ENTITY}/{DATESTAMP}/*/*.json")
-bronze_df = (
-    raw_df.withColumn("response",explode(col("response")))
-    .select("response.*")
-)
+responses = raw_df.withColumn("response",explode(col("response")))
 
-display(bronze_df.take(5))
+if not responses.isEmpty():
+    bronze_df = (
+        responses.withColumn("league_id",raw_df.parameters.league)
+        .select(["league_id","response.*"])
+    )
 
-ingestor.write_to_bronze_table(df=bronze_df,table_name=ENTITY,mode="append")
+    display(bronze_df.take(5))
+
+    ingestor.write_to_bronze_table(df=bronze_df,table_name=ENTITY,mode="append")
 
 # METADATA ********************
 

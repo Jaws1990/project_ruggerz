@@ -22,29 +22,8 @@
 
 # CELL ********************
 
-%run api_ingestor
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-from notebookutils import mssparkutils
 from datetime import datetime
-from pyspark.sql.functions import explode
-
-ENDPOINT = "leagues"
-ENTITY = "leagues"
-DATESTAMP = datetime.now().strftime("%Y%m%d")
-FILENAME = f"{ENTITY}.json"
-OUTPUT_PATH = f"Files/raw/{ENTITY}/{DATESTAMP}"
-ingestor = APIIngestor()
-
-mssparkutils.fs.mounts()
+from pyspark.sql.functions import col,to_date,current_date,explode,sha2,concat_ws
 
 # METADATA ********************
 
@@ -55,7 +34,8 @@ mssparkutils.fs.mounts()
 
 # CELL ********************
 
-ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
+#Key columns to check for changes on (post bronze transformation)
+HASH_COLUMNS = ["league_name", "league_type", "logo", "country_id"]
 
 # METADATA ********************
 
@@ -66,15 +46,24 @@ ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
 
 # CELL ********************
 
-raw_df = spark.read.option("multiline", "true").json(f"{OUTPUT_PATH}/{FILENAME}")
-responses = raw_df.withColumn("response",explode(col("response")))
+target_date = "2026-08-10"
+#target_date = current_date()
 
-if not responses.isEmpty():
-    bronze_df = responses.select("response.*")
+bronze_df = spark.table("bronze.countries")
 
-    display(bronze_df.take(5))
-
-    ingestor.write_to_bronze_table(df=bronze_df,table_name=ENTITY,mode="append")
+silver_df = (
+    bronze_df
+    .filter(to_date("ingested_at") == target_date)
+    .select(
+        col("id")
+        ,col("name").alias("league_name")
+        ,col("type").alias("league_type")
+        ,col("logo")
+        ,col("country.id").alias("country_id")
+    )
+    .withColumn("row_hash",sha2(concat_ws("||", *[col(c) for c in HASH_COLUMNS]), 256))
+)
+silver_df.show()
 
 # METADATA ********************
 

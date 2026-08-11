@@ -55,6 +55,16 @@ FILENAME = f"{ENTITY}.json"
 OUTPUT_PATH = f"Files/raw/{ENTITY}/{DATESTAMP}"
 
 ingestor = APIIngestor()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
 
 # METADATA ********************
@@ -67,14 +77,14 @@ ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
 # CELL ********************
 
 raw_df = spark.read.option("multiline", "true").json(f"{OUTPUT_PATH}/{FILENAME}")
-bronze_df = (
-    raw_df.withColumn("response",explode(col("response")))
-    .select("response.*")
-)
+responses = raw_df.withColumn("response",explode(col("response")))
 
-display(bronze_df.take(5))
+if not responses.isEmpty():
+    bronze_df = responses.select("response.*")
 
-ingestor.write_to_bronze_table(df=bronze_df,table_name=ENTITY,mode="append")
+    display(bronze_df.take(5))
+
+    ingestor.write_to_bronze_table(df=bronze_df,table_name=ENTITY,mode="append")
 
 # METADATA ********************
 

@@ -22,29 +22,8 @@
 
 # CELL ********************
 
-%run api_ingestor
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-from notebookutils import mssparkutils
 from datetime import datetime
-from pyspark.sql.functions import explode
-
-ENDPOINT = "leagues"
-ENTITY = "leagues"
-DATESTAMP = datetime.now().strftime("%Y%m%d")
-FILENAME = f"{ENTITY}.json"
-OUTPUT_PATH = f"Files/raw/{ENTITY}/{DATESTAMP}"
-ingestor = APIIngestor()
-
-mssparkutils.fs.mounts()
+from pyspark.sql.functions import col,to_date, current_date
 
 # METADATA ********************
 
@@ -55,7 +34,22 @@ mssparkutils.fs.mounts()
 
 # CELL ********************
 
-ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
+target_date = "2026-08-10"
+#target_date = current_date()
+
+bronze_df = spark.table("bronze.countries")
+
+silver_df = (
+    bronze_df.filter(to_date("ingested_at") == target_date)
+    .select(
+        "code"
+        ,"flag"
+        ,"id"
+        ,"name"
+    )
+)
+print(silver_df.schema)
+display(silver_df)
 
 # METADATA ********************
 
