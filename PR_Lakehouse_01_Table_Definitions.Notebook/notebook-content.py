@@ -41,6 +41,52 @@
 # CELL ********************
 
 # MAGIC %%sql
+# MAGIC CREATE TABLE IF NOT EXISTS silver.teams (
+# MAGIC     id              BIGINT      NOT NULL,
+# MAGIC     team_name       STRING,
+# MAGIC     is_national     BOOLEAN,
+# MAGIC     logo            STRING,
+# MAGIC     founded         INT,
+# MAGIC     arena_capacity  INT,
+# MAGIC     arena_location  STRING,
+# MAGIC     arena_name      STRING,
+# MAGIC     country_id      INT,
+# MAGIC     row_hash        STRING      NOT NULL,
+# MAGIC     processed_at    TIMESTAMP   NOT NULL,
+# MAGIC     valid_from      DATE   NOT NULL,
+# MAGIC     valid_to        DATE,
+# MAGIC     is_current      BOOLEAN     NOT NULL
+# MAGIC )
+# MAGIC USING DELTA
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC CREATE TABLE IF NOT EXISTS silver.team_leagues (
+# MAGIC     team_id       INT       NOT NULL,
+# MAGIC     league_id     INT       NOT NULL,
+# MAGIC     season        INT       NOT NULL,
+# MAGIC     processed_at  TIMESTAMP NOT NULL
+# MAGIC )
+# MAGIC USING DELTA
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
 # MAGIC CREATE TABLE IF NOT EXISTS silver.leagues (
 # MAGIC     id            BIGINT      NOT NULL,
 # MAGIC     league_name   STRING,
@@ -49,8 +95,8 @@
 # MAGIC     country_id    BIGINT,
 # MAGIC     row_hash      STRING,
 # MAGIC     processed_at  TIMESTAMP   NOT NULL,
-# MAGIC     valid_from    TIMESTAMP   NOT NULL,
-# MAGIC     valid_to      TIMESTAMP,
+# MAGIC     valid_from    DATE   NOT NULL,
+# MAGIC     valid_to      DATE,
 # MAGIC     is_current    BOOLEAN     NOT NULL
 # MAGIC )
 # MAGIC USING DELTA

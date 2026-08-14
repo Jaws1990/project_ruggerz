@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "delta_table_manager"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "cd6f3c7e-b179-9aed-4923-cbb35823792f"
+  }
+}

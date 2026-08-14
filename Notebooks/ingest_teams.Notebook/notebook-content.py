@@ -106,7 +106,8 @@ responses = raw_df.withColumn("response",explode(col("response")))
 if not responses.isEmpty():
     bronze_df = (
         responses.withColumn("league_id",raw_df.parameters.league)
-        .select(["league_id","response.*"])
+        .withColumn("season",raw_df.parameters.season)
+        .select(["league_id","response.*","season"])
     )
 
     display(bronze_df.take(5))
