@@ -34,7 +34,7 @@
 # CELL ********************
 
 from datetime import datetime
-from pyspark.sql.functions import col,to_date,current_date,explode,sha2,concat_ws
+from pyspark.sql import functions as F
 
 # METADATA ********************
 
@@ -47,7 +47,7 @@ from pyspark.sql.functions import col,to_date,current_date,explode,sha2,concat_w
 
 #Key columns to check for changes on (post bronze transformation)
 HASH_COLUMNS = [
-    "team_name"
+    "team_name",
     "is_national",
     "logo",
     "founded",
@@ -73,23 +73,23 @@ bronze_df = spark.table("bronze.teams")
 
 silver_df = (
     bronze_df
-    .filter(to_date("ingested_at") == target_date)
+    .filter(F.to_date("ingested_at") == target_date)
     .select(
-        col("id")
-        ,col("name").alias("team_name")
-        ,col("national").alias("is_national")
-        ,col("logo")
-        ,col("founded").cast("int")
-        ,col("arena.capacity").cast("int").alias("arena_capacity")
-        ,col("arena.location").alias("arena_location")
-        ,col("arena.name").alias("arena_name")
-        ,col("country.id").cast("int").alias("country_id") 
+        F.col("id")
+        ,F.col("name").alias("team_name")
+        ,F.col("national").alias("is_national")
+        ,F.col("logo")
+        ,F.col("founded").cast("int")
+        ,F.col("arena.capacity").cast("int").alias("arena_capacity")
+        ,F.col("arena.location").alias("arena_location")
+        ,F.col("arena.name").alias("arena_name")
+        ,F.col("country.id").cast("int").alias("country_id") 
     )
-    .withColumn("row_hash",sha2(concat_ws("||", *[col(c) for c in HASH_COLUMNS]), 256))
+    .withColumn("row_hash",F.sha2(F.concat_ws("||", *[F.col(c) for c in HASH_COLUMNS]), 256))
     .dropDuplicates()
 )
 
-display(silver_df)
+display(silver_df.limit(10))
 
 
 # METADATA ********************
@@ -101,6 +101,8 @@ display(silver_df)
 
 # CELL ********************
 
+table_manager = DeltaTableManager()
+table_manager.merge_scd2(silver_df,"silver.teams",["id"])
 
 # METADATA ********************
 

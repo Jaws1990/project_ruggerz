@@ -22,8 +22,19 @@
 
 # CELL ********************
 
+%run delta_table_manager
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 from datetime import datetime
-from pyspark.sql.functions import col,to_date,current_date,explode
+from pyspark.sql import functions as F
 
 # METADATA ********************
 
@@ -40,19 +51,31 @@ target_date = "2026-08-10"
 bronze_df = spark.table("bronze.leagues")
 
 silver_df = (
-    bronze_df.filter(to_date("ingested_at") == target_date)
-    .withColumn("league_seasons",explode("seasons"))
+    bronze_df.filter(F.to_date("ingested_at") == target_date)
+    .withColumn("league_seasons",F.explode("seasons"))
     .select(
-        col("id").alias("league_id")
-        ,col("league_seasons.season").cast("int").alias("season")
-        ,col("league_seasons.current").alias("is_current")
-        ,col("league_seasons.start").cast("date").alias("start_date")
-        ,col("league_seasons.end").cast("date").alias("end_date")
+        F.col("id").alias("league_id")
+        ,F.col("league_seasons.season").cast("int").alias("season")
+        ,F.col("league_seasons.current").alias("is_current")
+        ,F.col("league_seasons.start").cast("date").alias("start_date")
+        ,F.col("league_seasons.end").cast("date").alias("end_date")
     )
 )
 
-display(silver_df)
+display(silver_df.limit(10))
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+table_manager = DeltaTableManager()
+table_manager.upsert(silver_df,"silver.league_seasons",["league_id","season"])
 
 # METADATA ********************
 

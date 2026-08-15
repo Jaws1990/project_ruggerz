@@ -23,6 +23,20 @@
 # CELL ********************
 
 # MAGIC %%sql
+# MAGIC CREATE SCHEMA IF NOT EXISTS bronze;
+# MAGIC CREATE SCHEMA IF NOT EXISTS silver;
+# MAGIC CREATE SCHEMA IF NOT EXISTS gold;
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
 # MAGIC CREATE TABLE IF NOT EXISTS silver.countries (
 # MAGIC     id INT,
 # MAGIC     code STRING,
@@ -111,7 +125,7 @@
 # CELL ********************
 
 # MAGIC %%sql
-# MAGIC CREATE TABLE IF NOT EXISTS silver.league_season (
+# MAGIC CREATE TABLE IF NOT EXISTS silver.league_seasons (
 # MAGIC     league_id     BIGINT      NOT NULL,
 # MAGIC     season        INT         NOT NULL,
 # MAGIC     is_current    BOOLEAN,
