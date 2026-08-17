@@ -38,10 +38,46 @@
 
 # MAGIC %%sql
 # MAGIC CREATE TABLE IF NOT EXISTS silver.countries (
-# MAGIC     id INT,
+# MAGIC     id BIGINT,
 # MAGIC     code STRING,
 # MAGIC     flag STRING,
 # MAGIC     processed_at TIMESTAMP
+# MAGIC )
+# MAGIC USING DELTA;
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
+# MAGIC CREATE TABLE IF NOT EXISTS silver.games (
+# MAGIC     id                             BIGINT      NOT NULL,
+# MAGIC     country_id                     BIGINT,
+# MAGIC     league_id                      BIGINT,
+# MAGIC     season                         INT,
+# MAGIC     game_week                           INT,
+# MAGIC     kick_off_date                  DATE,
+# MAGIC     kick_off_time                  STRING,
+# MAGIC     timezone                       STRING,
+# MAGIC     home_team_id                   BIGINT,
+# MAGIC     away_team_id                   BIGINT,
+# MAGIC     home_score                     INT,
+# MAGIC     away_score                     INT,
+# MAGIC     game_status                         STRING,
+# MAGIC     first_half_home_score          INT,
+# MAGIC     first_half_away_score          INT,
+# MAGIC     second_half_home_score         INT,
+# MAGIC     second_half_away_score         INT,
+# MAGIC     overtime_home_score            INT,
+# MAGIC     overtime_away_score            INT,
+# MAGIC     second_overtime_home_score     INT,
+# MAGIC     second_overtime_away_score     INT,
+# MAGIC     processed_at                   TIMESTAMP   NOT NULL
 # MAGIC )
 # MAGIC USING DELTA;
 
@@ -64,7 +100,7 @@
 # MAGIC     arena_capacity  INT,
 # MAGIC     arena_location  STRING,
 # MAGIC     arena_name      STRING,
-# MAGIC     country_id      INT,
+# MAGIC     country_id      BIGINT,
 # MAGIC     row_hash        STRING      NOT NULL,
 # MAGIC     processed_at    TIMESTAMP   NOT NULL,
 # MAGIC     valid_from      DATE   NOT NULL,
@@ -84,8 +120,8 @@
 
 # MAGIC %%sql
 # MAGIC CREATE TABLE IF NOT EXISTS silver.team_leagues (
-# MAGIC     team_id       INT       NOT NULL,
-# MAGIC     league_id     INT       NOT NULL,
+# MAGIC     team_id       BIGINT       NOT NULL,
+# MAGIC     league_id     BIGINT       NOT NULL,
 # MAGIC     season        INT       NOT NULL,
 # MAGIC     processed_at  TIMESTAMP NOT NULL
 # MAGIC )
