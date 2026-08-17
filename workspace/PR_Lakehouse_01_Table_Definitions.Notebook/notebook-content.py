@@ -91,6 +91,41 @@
 # CELL ********************
 
 # MAGIC %%sql
+# MAGIC CREATE TABLE IF NOT EXISTS silver.standings (
+# MAGIC     standings_id       STRING NOT NULL,
+# MAGIC     snapshot_date      DATE  NOT NULL,
+# MAGIC     country_id         BIGINT,
+# MAGIC     season             INT,
+# MAGIC     league_id          BIGINT,
+# MAGIC     group_name         STRING,
+# MAGIC     team_id            BIGINT,
+# MAGIC     description        STRING,
+# MAGIC     form               STRING,
+# MAGIC     position           INT,
+# MAGIC     points             INT,
+# MAGIC     points_for         INT,
+# MAGIC     points_against     INT,
+# MAGIC     games_played       INT,
+# MAGIC     games_won          INT,
+# MAGIC     games_lost         INT,
+# MAGIC     games_drawn        INT,
+# MAGIC     won_percentage     DECIMAL(5,2),
+# MAGIC     lost_percentage    DECIMAL(5,2),
+# MAGIC     drawn_percentage   DECIMAL(5,2),
+# MAGIC     processed_at       TIMESTAMP   NOT NULL
+# MAGIC )
+# MAGIC USING DELTA;
+
+# METADATA ********************
+
+# META {
+# META   "language": "sparksql",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# MAGIC %%sql
 # MAGIC CREATE TABLE IF NOT EXISTS silver.teams (
 # MAGIC     id              BIGINT      NOT NULL,
 # MAGIC     team_name       STRING,

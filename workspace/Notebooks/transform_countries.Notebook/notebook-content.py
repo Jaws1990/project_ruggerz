@@ -22,6 +22,17 @@
 
 # CELL ********************
 
+%run delta_table_manager
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 from datetime import datetime
 from pyspark.sql import functions as F
 
@@ -48,8 +59,8 @@ silver_df = (
         ,"name"
     )
 )
-print(silver_df.schema)
-display(silver_df)
+
+display(silver_df.limit(10))
 
 # METADATA ********************
 
@@ -60,15 +71,8 @@ display(silver_df)
 
 # CELL ********************
 
-raw_df = spark.read.option("multiline", "true").json(f"{OUTPUT_PATH}/{FILENAME}")
-responses = raw_df.withColumn("response", F.explode(F.col("response")))
-
-if not responses.isEmpty():
-    bronze_df = responses.select("response.*")
-
-    display(bronze_df.take(5))
-
-    ingestor.write_to_bronze_table(df=bronze_df,table_name=ENTITY,mode="append")
+table_manager = DeltaTableManager()
+table_manager.upsert(silver_df,"silver.countries",["id"])
 
 # METADATA ********************
 

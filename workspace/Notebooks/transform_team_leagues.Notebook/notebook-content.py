@@ -45,37 +45,22 @@ from pyspark.sql import functions as F
 
 # CELL ********************
 
-#Key columns to check for changes on (post bronze transformation)
-HASH_COLUMNS = ["league_name", "league_type", "logo", "country_id"]
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-target_date = "2026-08-10"
+target_date = "2026-08-14"
 #target_date = current_date()
 
-bronze_df = spark.table("bronze.leagues")
+bronze_df = spark.table("bronze.teams")
 
 silver_df = (
-    bronze_df
-    .filter(F.to_date("ingested_at") == target_date)
+    bronze_df.filter(F.to_date("ingested_at") == target_date)
     .select(
-        F.col("id")
-        ,F.col("name").alias("league_name")
-        ,F.col("type").alias("league_type")
-        ,F.col("logo")
-        ,F.col("country.id").alias("country_id")
-    )
-    .withColumn("row_hash", F.sha2(F.concat_ws("||", *[F.col(c) for c in HASH_COLUMNS]), 256))
+        F.col("id").alias("team_id"),
+        F.col("season"),
+        F.col("league_id")
+    ).distinct()
 )
 
 display(silver_df.limit(10))
+
 
 # METADATA ********************
 
@@ -87,7 +72,7 @@ display(silver_df.limit(10))
 # CELL ********************
 
 table_manager = DeltaTableManager()
-table_manager.merge_scd2(silver_df,"silver.leagues",["id"])
+table_manager.upsert(silver_df,"silver.team_leagues",["team_id","league_id","season"])
 
 # METADATA ********************
 
