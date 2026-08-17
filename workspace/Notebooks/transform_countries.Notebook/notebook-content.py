@@ -56,7 +56,7 @@ silver_df = (
         "code",
         "flag",
         "id",
-        "name",
+        F.col("name").alias("country_name"),
     )
 )
 

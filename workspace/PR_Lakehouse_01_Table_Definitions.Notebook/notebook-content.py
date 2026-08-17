@@ -39,6 +39,7 @@
 # MAGIC %%sql
 # MAGIC CREATE TABLE IF NOT EXISTS silver.countries (
 # MAGIC     id BIGINT,
+# MAGIC     country_name STRING,
 # MAGIC     code STRING,
 # MAGIC     flag STRING,
 # MAGIC     processed_at TIMESTAMP
