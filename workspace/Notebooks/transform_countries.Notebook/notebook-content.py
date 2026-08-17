@@ -22,22 +22,8 @@
 
 # CELL ********************
 
-%run api_ingestor
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-from notebookutils import mssparkutils
 from datetime import datetime
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType
-from pyspark.sql.functions import col,explode
-mssparkutils.fs.mounts()
+from pyspark.sql import functions as F
 
 # METADATA ********************
 
@@ -48,24 +34,22 @@ mssparkutils.fs.mounts()
 
 # CELL ********************
 
-ENDPOINT = "countries"
-ENTITY = "countries"
-DATESTAMP = datetime.now().strftime("%Y%m%d")
-FILENAME = f"{ENTITY}.json"
-OUTPUT_PATH = f"Files/raw/{ENTITY}/{DATESTAMP}"
+target_date = "2026-08-10"
+#target_date = current_date()
 
-ingestor = APIIngestor()
+bronze_df = spark.table("bronze.countries")
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
+silver_df = (
+    bronze_df.filter(F.to_date("ingested_at") == target_date)
+    .select(
+        "code"
+        ,"flag"
+        ,"id"
+        ,"name"
+    )
+)
+print(silver_df.schema)
+display(silver_df)
 
 # METADATA ********************
 
@@ -77,7 +61,7 @@ ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
 # CELL ********************
 
 raw_df = spark.read.option("multiline", "true").json(f"{OUTPUT_PATH}/{FILENAME}")
-responses = raw_df.withColumn("response",explode(col("response")))
+responses = raw_df.withColumn("response", F.explode(F.col("response")))
 
 if not responses.isEmpty():
     bronze_df = responses.select("response.*")
