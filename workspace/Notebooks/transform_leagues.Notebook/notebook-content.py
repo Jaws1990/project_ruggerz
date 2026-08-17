@@ -66,11 +66,11 @@ silver_df = (
     bronze_df
     .filter(F.to_date("ingested_at") == target_date)
     .select(
-        F.col("id")
-        ,F.col("name").alias("league_name")
-        ,F.col("type").alias("league_type")
-        ,F.col("logo")
-        ,F.col("country.id").alias("country_id")
+        F.col("id"),
+        F.col("name").alias("league_name"),
+        F.col("type").alias("league_type"),
+        F.col("logo"),
+        F.col("country.id").alias("country_id"),
     )
     .withColumn("row_hash", F.sha2(F.concat_ws("||", *[F.col(c) for c in HASH_COLUMNS]), 256))
 )

@@ -52,13 +52,13 @@ bronze_df = spark.table("bronze.leagues")
 
 silver_df = (
     bronze_df.filter(F.to_date("ingested_at") == target_date)
-    .withColumn("league_seasons",F.explode("seasons"))
+    .withColumn("league_seasons", F.explode("seasons"))
     .select(
-        F.col("id").alias("league_id")
-        ,F.col("league_seasons.season").cast("int").alias("season")
-        ,F.col("league_seasons.current").alias("is_current")
-        ,F.col("league_seasons.start").cast("date").alias("start_date")
-        ,F.col("league_seasons.end").cast("date").alias("end_date")
+        F.col("id").alias("league_id"),
+        F.col("league_seasons.season").cast("int").alias("season"),
+        F.col("league_seasons.current").alias("is_current"),
+        F.col("league_seasons.start").cast("date").alias("start_date"),
+        F.col("league_seasons.end").cast("date").alias("end_date"),
     )
 )
 

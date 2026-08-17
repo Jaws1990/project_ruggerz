@@ -112,7 +112,8 @@ if not responses.isEmpty():
                 df=bronze_df,
                 table_name=ENTITY,
                 mode="merge",
-                merge_condition="target.id = source.id")
+                merge_condition="target.id = source.id",
+            )
 
 # METADATA ********************
 

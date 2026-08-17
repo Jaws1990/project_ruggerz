@@ -55,7 +55,7 @@ silver_df = (
     .select(
         F.col("id").alias("team_id"),
         F.col("season"),
-        F.col("league_id")
+        F.col("league_id"),
     ).distinct()
 )
 

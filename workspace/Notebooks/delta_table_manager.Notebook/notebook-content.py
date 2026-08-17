@@ -70,7 +70,7 @@ class DeltaTableManager:
         self,
         source_df: DataFrame,
         target_table: str,
-        key_cols: list[str]
+        key_cols: list[str],
     ) -> None:
         """
         Performs an SCD Type 2 merge into a Delta table.
@@ -88,7 +88,7 @@ class DeltaTableManager:
 
         target_delta_tbl = DeltaTable.forName(
             spark,
-            target_table
+            target_table,
         )
 
         # Join incoming data with existing current records on key columns
@@ -100,7 +100,7 @@ class DeltaTableManager:
                 .alias("target")
                 .filter(F.col("is_current") == 1),
                 key_cols,
-                "left"
+                "left",
             )
         )
 
@@ -109,13 +109,13 @@ class DeltaTableManager:
             "action",
             F.when(
                 F.col(f"target.{key_cols[0]}").isNull(),
-                "new"
+                "new",
             )
             .when(
                 F.col("source.row_hash") != F.col("target.row_hash"),
-                "update"
+                "update",
             )
-            .otherwise("no change")
+            .otherwise("no change"),
         )
 
         # New and changed records need to be inserted
@@ -134,9 +134,9 @@ class DeltaTableManager:
                 .withColumn("valid_from", F.current_date())
                 .withColumn(
                     "valid_to",
-                    F.lit(None).cast("date")
+                    F.lit(None).cast("date"),
                 )
-                .withColumn("processed_at",F.current_timestamp())
+                .withColumn("processed_at", F.current_timestamp())
                 .drop("action")
             )
 
@@ -160,7 +160,7 @@ class DeltaTableManager:
                 .select(
                     *[F.col(f"source.{col}") for col in source_df.columns],
                 )
-                .withColumn("processed_at",F.current_timestamp())
+                .withColumn("processed_at", F.current_timestamp())
                 .drop("action")
             )
 
@@ -179,13 +179,13 @@ class DeltaTableManager:
                     condition=(
                         f"{merge_condition} "
                         f"AND target.is_current = 1"
-                    )
+                    ),
                 )
                 .whenMatchedUpdate(
                     set={
                         "is_current": F.lit(False),
-                        "valid_to": F.current_date()
-                    }
+                        "valid_to": F.current_date(),
+                    },
                 )
                 .execute()
             )

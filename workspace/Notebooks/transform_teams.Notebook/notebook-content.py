@@ -75,17 +75,17 @@ silver_df = (
     bronze_df
     .filter(F.to_date("ingested_at") == target_date)
     .select(
-        F.col("id")
-        ,F.col("name").alias("team_name")
-        ,F.col("national").alias("is_national")
-        ,F.col("logo")
-        ,F.col("founded").cast("int")
-        ,F.col("arena.capacity").cast("int").alias("arena_capacity")
-        ,F.col("arena.location").alias("arena_location")
-        ,F.col("arena.name").alias("arena_name")
-        ,F.col("country.id").cast("int").alias("country_id") 
+        F.col("id"),
+        F.col("name").alias("team_name"),
+        F.col("national").alias("is_national"),
+        F.col("logo"),
+        F.col("founded").cast("int"),
+        F.col("arena.capacity").cast("int").alias("arena_capacity"),
+        F.col("arena.location").alias("arena_location"),
+        F.col("arena.name").alias("arena_name"),
+        F.col("country.id").cast("int").alias("country_id"),
     )
-    .withColumn("row_hash",F.sha2(F.concat_ws("||", *[F.col(c) for c in HASH_COLUMNS]), 256))
+    .withColumn("row_hash", F.sha2(F.concat_ws("||\, *[F.col(c) for c in HASH_COLUMNS]), 256))
     .dropDuplicates()
 )
 

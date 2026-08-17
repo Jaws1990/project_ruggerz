@@ -51,10 +51,10 @@ A deliberate learning choice, not a "best tool for the job" call — this projec
 - [x] Silver schemas notebook (DDL for tables built so far)
 - [x] Silver transform: `leagues` (SCD2), `league_seasons` (SCD1)
 - [x] Silver transform: `teams` (SCD2), `team_leagues` (bridge)
-- [ ] Silver transform: `countries` (SCD1)
-- [ ] Silver transform: `standings` (periodic snapshot)
-- [ ] Silver transform: `games` (fact table)
-- [ ] Shared utility module (`scd2_merge`, `scd1_merge`, `snapshot_append`)
+- [x] Silver transform: `countries` (SCD1)
+- [x] Silver transform: `standings` (periodic snapshot)
+- [x] Silver transform: `games` (fact table)
+- [x] Shared utility module (`scd2_merge`, `upsert`)
 - [ ] Fabric Data Pipelines — orchestration and scheduling for all notebooks
 - [x] Fabric variable library — season parameter
 - [x] Lakehouse CSV — league scope config

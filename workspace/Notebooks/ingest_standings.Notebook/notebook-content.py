@@ -114,7 +114,8 @@ if not responses.isEmpty():
     ingestor.write_to_bronze_table(
                 df=bronze_df,
                 table_name=ENTITY,
-                mode="append")
+                mode="append",
+            )
 
 # METADATA ********************
 

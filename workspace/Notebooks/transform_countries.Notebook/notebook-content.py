@@ -53,10 +53,10 @@ bronze_df = spark.table("bronze.countries")
 silver_df = (
     bronze_df.filter(F.to_date("ingested_at") == target_date)
     .select(
-        "code"
-        ,"flag"
-        ,"id"
-        ,"name"
+        "code",
+        "flag",
+        "id",
+        "name",
     )
 )
 

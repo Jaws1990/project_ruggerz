@@ -24,7 +24,7 @@ class APIIngestor:
         self.var_library = notebookutils.variableLibrary.getLibrary("PR_variables")
         self.api_key = credentials.getSecret(
             self.var_library.getVariable("key_vault_url"),
-            "api-sports-key"
+            "api-sports-key",
         )
         self.base_api_url = self.var_library.getVariable("api_base_url")
 
@@ -50,7 +50,7 @@ class APIIngestor:
         mssparkutils.fs.put(
             f"{output_path}/{filename}",
             json.dumps(data, indent=2),
-            overwrite=True
+            overwrite=True,
         )
 
 
@@ -130,7 +130,7 @@ class APIIngestor:
                     delta_table.alias("target")
                     .merge(
                         enriched.alias("source"),
-                        merge_condition
+                        merge_condition,
                     )
                     .whenMatchedUpdateAll()
                     .whenNotMatchedInsertAll()
@@ -147,11 +147,11 @@ class APIIngestor:
                 .mode(mode)
                 .option(
                     "overwriteSchema",
-                    "true" if mode == "overwrite" else "false"
+                    "true" if mode == "overwrite" else "false",
                 )
                 .option(
                     "mergeSchema",
-                    "true" if mode == "append" else "false"
+                    "true" if mode == "append" else "false",
                 )
                 .saveAsTable(table_path)
             )

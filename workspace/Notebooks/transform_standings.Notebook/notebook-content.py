@@ -64,28 +64,28 @@ silver_df = (
                 F.col("league.season").cast("string"),
                 F.coalesce(F.col("stage"), F.lit("")),
                 F.coalesce(F.col("group.name"), F.lit("")),
-                F.date_format(F.col("ingested_at"),"yyyyMMdd")
-            ), 256
-        ).alias("standings_id")
-        ,F.col("ingested_at").cast("date").alias("snapshot_date")
-        ,F.col("country.id").alias("country_id")
-        ,F.col("league.season").alias("season").cast("int")
-        ,F.col("league.id").alias("league_id").cast("int")
-        ,F.col("group.name").alias("group_name")
-        ,F.col("team.id").alias("team_id")
-        ,F.col("description")
-        ,F.col("form")
-        ,F.col("position").cast("int")
-        ,F.col("points").cast("int")
-        ,F.col("goals.for").alias("points_for")
-        ,F.col("goals.against").alias("points_against")
-        ,F.col("games.played").alias("games_played")
-        ,F.col("games.win.total").alias("games_won")
-        ,F.col("games.lose.total").alias("games_lost")
-        ,F.col("games.draw.total").alias("games_drawn")
-        ,F.col("games.win.percentage").cast("decimal(5,2)").alias("won_percentage")
-        ,F.col("games.lose.percentage").cast("decimal(5,2)").alias("lost_percentage")
-        ,F.col("games.draw.percentage").cast("decimal(5,2)").alias("drawn_percentage")
+                F.date_format(F.col("ingested_at"), "yyyyMMdd"),
+            ), 256,
+        ).alias("standings_id"),
+        F.col("ingested_at").cast("date").alias("snapshot_date"),
+        F.col("country.id").alias("country_id"),
+        F.col("league.season").alias("season").cast("int"),
+        F.col("league.id").alias("league_id").cast("int"),
+        F.col("group.name").alias("group_name"),
+        F.col("team.id").alias("team_id"),
+        F.col("description"),
+        F.col("form"),
+        F.col("position").cast("int"),
+        F.col("points").cast("int"),
+        F.col("goals.for").alias("points_for"),
+        F.col("goals.against").alias("points_against"),
+        F.col("games.played").alias("games_played"),
+        F.col("games.win.total").alias("games_won"),
+        F.col("games.lose.total").alias("games_lost"),
+        F.col("games.draw.total").alias("games_drawn"),
+        F.col("games.win.percentage").cast("decimal(5,2)").alias("won_percentage"),
+        F.col("games.lose.percentage").cast("decimal(5,2)").alias("lost_percentage"),
+        F.col("games.draw.percentage").cast("decimal(5,2)").alias("drawn_percentage"),
     )
     .dropDuplicates()
 )
