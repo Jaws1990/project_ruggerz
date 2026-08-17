@@ -35,7 +35,7 @@
 
 from notebookutils import mssparkutils
 from datetime import datetime
-from pyspark.sql.functions import explode
+from pyspark.sql import functions as F
 
 ENDPOINT = "leagues"
 ENTITY = "leagues"
@@ -67,7 +67,7 @@ ingestor.download_json(ENDPOINT, OUTPUT_PATH, FILENAME)
 # CELL ********************
 
 raw_df = spark.read.option("multiline", "true").json(f"{OUTPUT_PATH}/{FILENAME}")
-responses = raw_df.withColumn("response",explode(col("response")))
+responses = raw_df.withColumn("response", F.explode(F.col("response")))
 
 if not responses.isEmpty():
     bronze_df = responses.select("response.*")

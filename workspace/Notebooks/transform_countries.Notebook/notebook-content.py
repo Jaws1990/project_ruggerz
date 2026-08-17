@@ -23,7 +23,7 @@
 # CELL ********************
 
 from datetime import datetime
-from pyspark.sql.functions import col,to_date, current_date
+from pyspark.sql import functions as F
 
 # METADATA ********************
 
@@ -40,7 +40,7 @@ target_date = "2026-08-10"
 bronze_df = spark.table("bronze.countries")
 
 silver_df = (
-    bronze_df.filter(to_date("ingested_at") == target_date)
+    bronze_df.filter(F.to_date("ingested_at") == target_date)
     .select(
         "code"
         ,"flag"
@@ -61,7 +61,7 @@ display(silver_df)
 # CELL ********************
 
 raw_df = spark.read.option("multiline", "true").json(f"{OUTPUT_PATH}/{FILENAME}")
-responses = raw_df.withColumn("response",explode(col("response")))
+responses = raw_df.withColumn("response", F.explode(F.col("response")))
 
 if not responses.isEmpty():
     bronze_df = responses.select("response.*")

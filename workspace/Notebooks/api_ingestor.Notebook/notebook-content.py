@@ -14,8 +14,8 @@ import json
 import os
 import requests
 from notebookutils import mssparkutils, credentials
-from pyspark.sql.functions import *
 from pyspark.sql import DataFrame
+from pyspark.sql import functions as F
 from delta.tables import DeltaTable
 from uuid import uuid4
 
@@ -115,9 +115,9 @@ class APIIngestor:
             )
 
         enriched = (
-            df.withColumn("source_file",regexp_replace(input_file_name(),r".*?/Files/","Files/"))
-            .withColumn("ingested_at", current_timestamp())
-            .withColumn("batch_id", lit(str(uuid4())))
+            df.withColumn("source_file", F.regexp_replace(F.input_file_name(), r".*?/Files/", "Files/"))
+            .withColumn("ingested_at", F.current_timestamp())
+            .withColumn("batch_id", F.lit(str(uuid4())))
         )
         display(enriched.limit(5))
 

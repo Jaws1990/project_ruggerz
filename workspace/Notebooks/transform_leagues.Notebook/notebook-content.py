@@ -23,7 +23,7 @@
 # CELL ********************
 
 from datetime import datetime
-from pyspark.sql.functions import col,to_date,current_date,explode,sha2,concat_ws
+from pyspark.sql import functions as F
 
 # METADATA ********************
 
@@ -53,15 +53,15 @@ bronze_df = spark.table("bronze.countries")
 
 silver_df = (
     bronze_df
-    .filter(to_date("ingested_at") == target_date)
+    .filter(F.to_date("ingested_at") == target_date)
     .select(
-        col("id")
-        ,col("name").alias("league_name")
-        ,col("type").alias("league_type")
-        ,col("logo")
-        ,col("country.id").alias("country_id")
+        F.col("id")
+        ,F.col("name").alias("league_name")
+        ,F.col("type").alias("league_type")
+        ,F.col("logo")
+        ,F.col("country.id").alias("country_id")
     )
-    .withColumn("row_hash",sha2(concat_ws("||", *[col(c) for c in HASH_COLUMNS]), 256))
+    .withColumn("row_hash", F.sha2(F.concat_ws("||", *[F.col(c) for c in HASH_COLUMNS]), 256))
 )
 silver_df.show()
 
