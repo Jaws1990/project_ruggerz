@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='id',
+        unique_key='game_key',
         incremental_strategy='merge'
     )
 }}
@@ -25,24 +25,25 @@ select
     t_home.team_key                          as home_team_key,
     t_away.team_key                          as away_team_key,
     comp_s.competition_season_key,
-    comp.competition_key
+    comp.competition_key,
+    CURRENT_TIMESTAMP AS loaded_at
 from  {{ source('silver', 'games') }} f
 left join {{ ref('dim_teams') }} t_home
     on f.home_team_id = t_home.team_id
    and f.kick_off_date >= t_home.valid_from
-   and f.kick_off_date <  t_home.valid_to
+   and f.kick_off_date <  COALESCE(t_home.valid_to, '2099-01-01')
 left join {{ ref('dim_teams') }} t_away
     on f.away_team_id = t_away.team_id
    and f.kick_off_date >= t_away.valid_from
-   and f.kick_off_date <  t_away.valid_to
+   and f.kick_off_date <  COALESCE(t_away.valid_to, '2099-01-01')
 left join {{ ref('dim_competitions') }} comp
     on f.league_id = comp.competition_id
    and f.kick_off_date >= comp.valid_from
-   and f.kick_off_date <  comp.valid_to
+   and f.kick_off_date <  COALESCE(comp.valid_to, '2099-01-01')
 left join {{ ref('dim_competition_seasons') }} comp_s
-    on f.league_id = comp_s.league_id
+    on f.league_id = comp_s.competition_id
    and f.season    = comp_s.season
 
 {% if is_incremental() %}
-    where f.processed_at > (select max(processed_at) from {{ this }})
+    where f.processed_at > (select COALESCE(max(loaded_at), '1900-01-01') from {{ this }})
 {% endif %} 

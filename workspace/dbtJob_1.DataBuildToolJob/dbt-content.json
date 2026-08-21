@@ -17,5 +17,13 @@
         }
       }
     }
+  },
+  "command": {
+    "operation": "run",
+    "arguments": {
+      "select": "",
+      "failFast": true,
+      "threads": 4
+    }
   }
 }

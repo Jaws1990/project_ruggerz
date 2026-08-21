@@ -1,6 +1,6 @@
 select
-    xxhash64(team_id, valid_from, row_hash) as team_key,
-    id as team_id,
+    abs(xxhash64(t.id, valid_from, row_hash)) as team_key,
+    t.id as team_id,
     team_name,
     is_national,
     logo,

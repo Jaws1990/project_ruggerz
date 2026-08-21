@@ -1,6 +1,6 @@
 SELECT 
 abs(xxhash64(id, row_hash, valid_from)) as competition_key,
-league_id as competition_id,
+id as competition_id,
 league_name as competition_name,
 league_type as competition_type,
 logo,
