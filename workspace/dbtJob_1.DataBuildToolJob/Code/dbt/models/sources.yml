@@ -9,9 +9,94 @@ sources:
     schema: silver
     tables:
       - name: countries
-      - name: games
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+
       - name: leagues
-      - name: league_seasons
-      - name: standings
+        description: SCD2 — one row per version of a league, is_current flags the active version.
+        tests:
+          - one_current_row_per_key:
+              natural_key_columns: ['id']
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+
       - name: teams
+        description: SCD2 — one row per version of a team, is_current flags the active version.
+        tests:
+          - one_current_row_per_key:
+              natural_key_columns: ['id']
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+
+      - name: league_seasons
+        columns:
+          - name: league_id
+            tests:
+              - not_null
+          - name: season
+            tests:
+              - not_null
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns: ['league_id', 'season']
+
+      - name: standings
+        description: Periodic snapshot — one row per team per league/season per weekly pull.
+        columns:
+          - name: snapshot_date
+            tests:
+              - not_null
+          - name: league_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('silver', 'leagues')
+                  field: id
+          - name: season
+            tests:
+              - not_null
+          - name: team_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('silver', 'teams')
+                  field: id
+          - name: country_id
+            tests:
+              - relationships:
+                  to: source('silver', 'countries')
+                  field: id
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns: ['snapshot_date', 'league_id', 'season', 'team_id']
+
+      - name: games
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+
       - name: team_leagues
+        columns:
+          - name: team_id
+            tests:
+              - not_null
+          - name: league_id
+            tests:
+              - not_null
+          - name: season
+            tests:
+              - not_null
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns: ['team_id', 'league_id', 'season']

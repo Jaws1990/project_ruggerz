@@ -47,6 +47,6 @@ SQL cells are written as PySpark `%%sql` magic cells (`# MAGIC %%sql` prefix on 
   - Periodic snapshot (`standings`) — every pull is a new row, not merged into history.
   - Bridge table (`team_leagues`) — upsert, no history.
   - `games` is a fact table (merge on `game_id`).
-- **Gold**: dbt builds the star schema and surrogate keys on top of already-historicised Silver tables. dbt snapshots are deliberately not used, since Silver already owns change-tracking. Surrogate keys use the `SID` naming convention (e.g. `competition_season_SID`), generated via `xxhash64` over the natural key columns when natural keys are not suitable.
+- **Gold**: dbt builds the star schema and surrogate keys on top of already-historicised Silver tables. dbt snapshots are deliberately not used, since Silver already owns change-tracking. Surrogate keys use the `_key_` naming convention (e.g. `competition_season_key`), generated via `xxhash64` over the natural key columns when natural keys are not suitable.
 
 Orchestration is via Fabric Data Pipelines triggering notebooks — nothing is intended to run ad hoc in production.

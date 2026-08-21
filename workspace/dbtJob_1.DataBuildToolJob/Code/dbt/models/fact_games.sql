@@ -26,20 +26,20 @@ select
     t_away.team_key                          as away_team_key,
     comp_s.competition_season_key,
     comp.competition_key
-from {{ {{ source('silver', 'games') }} }} f
-left join {{ ref('dim_team') }} t_home
+from  {{ source('silver', 'games') }} f
+left join {{ ref('dim_teams') }} t_home
     on f.home_team_id = t_home.team_id
    and f.kick_off_date >= t_home.valid_from
    and f.kick_off_date <  t_home.valid_to
-left join {{ ref('dim_team') }} t_away
+left join {{ ref('dim_teams') }} t_away
     on f.away_team_id = t_away.team_id
    and f.kick_off_date >= t_away.valid_from
    and f.kick_off_date <  t_away.valid_to
-left join {{ ref('dim_competition') }} comp
+left join {{ ref('dim_competitions') }} comp
     on f.league_id = comp.competition_id
    and f.kick_off_date >= comp.valid_from
    and f.kick_off_date <  comp.valid_to
-left join {{ ref('dim_competition_season') }} comp_s
+left join {{ ref('dim_competition_seasons') }} comp_s
     on f.league_id = comp_s.league_id
    and f.season    = comp_s.season
 
