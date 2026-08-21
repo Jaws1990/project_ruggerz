@@ -19,7 +19,7 @@
     }
   },
   "command": {
-    "operation": "build",
+    "operation": "compile",
     "arguments": {
       "exclude": "",
       "failFast": true,

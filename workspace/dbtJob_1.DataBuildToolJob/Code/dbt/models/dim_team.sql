@@ -1,11 +1,12 @@
 select
-    xxhash64(team_id, valid_from, row_hash) as team_SID,
+    xxhash64(team_id, valid_from, row_hash) as team_key,
+    id as team_id,
     team_name,
     is_national,
     logo,
     founded
     country_name,
-    flag,
+    country_flag,
     valid_from,
     valid_to,
     is_current
