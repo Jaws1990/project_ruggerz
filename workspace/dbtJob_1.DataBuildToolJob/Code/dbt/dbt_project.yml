@@ -21,5 +21,3 @@ clean-targets:
 models:
   my_dbt_project:
     +materialized: table
-    staging:
-      +materialized: view

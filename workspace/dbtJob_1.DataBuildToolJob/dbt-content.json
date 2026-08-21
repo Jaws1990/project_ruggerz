@@ -5,7 +5,7 @@
   },
   "profile": {
     "profileType": "Lakehouse",
-    "schema": "silver",
+    "schema": "gold",
     "connectionSettings": {
       "name": "PR_Lakehouse_01",
       "properties": {

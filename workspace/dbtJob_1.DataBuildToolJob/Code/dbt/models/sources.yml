@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: silver
+    description: >
+      Silver-layer tables in the PR_Lakehouse_01 lakehouse. These are cleaned/conformed
+      tables produced upstream by the transform_* notebooks, not built by dbt.
+    database: PR_Lakehouse_01
+    schema: silver
+    tables:
+      - name: countries
+      - name: games
+      - name: leagues
+      - name: league_seasons
+      - name: standings
+      - name: teams
+      - name: team_leagues
