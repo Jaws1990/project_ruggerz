@@ -118,36 +118,6 @@ class DeltaTableManager:
             .otherwise("no change"),
         )
 
-        # New and changed records need to be inserted
-        inserts_df = comparison_df.filter(
-            F.col("action").isin(["new", "update"])
-        )
-
-        if not inserts_df.isEmpty():
-            # Get only the source colums, set up SCD metadata columns
-            inserts_df = (
-                inserts_df
-                .select(
-                    *[F.col(f"source.{col}") for col in source_df.columns],
-                )
-                .withColumn("is_current", F.lit(True))
-                .withColumn("valid_from", F.current_date())
-                .withColumn(
-                    "valid_to",
-                    F.lit(None).cast("date"),
-                )
-                .withColumn("processed_at", F.current_timestamp())
-                .drop("action")
-            )
-
-            (
-                inserts_df
-                .write
-                .format("delta")
-                .mode("append")
-                .saveAsTable(target_table)
-            )
-
         # Changed records need their existing versions expired
         updates_df = comparison_df.filter(
             F.col("action") == "update"
@@ -189,6 +159,42 @@ class DeltaTableManager:
                 )
                 .execute()
             )
+
+        # New and changed records need to be inserted
+        inserts_df = comparison_df.filter(
+            F.col("action").isin(["new", "update"])
+        )
+
+        if not inserts_df.isEmpty():
+            # Get only the source colums, set up SCD metadata columns
+            inserts_df = (
+                inserts_df
+                .select(
+                    *[F.col(f"source.{col}") for col in source_df.columns],
+                )
+                .withColumn("is_current", F.lit(True))
+                .withColumn(
+                    "valid_from",
+                    F.when(F.col("action") == "new", F.lit("1900-01-01").cast("date"))
+                    .otherwise(F.current_date())
+                )
+                .withColumn(
+                    "valid_to",
+                    F.lit(None).cast("date"),
+                )
+                .withColumn("processed_at", F.current_timestamp())
+                .drop("action")
+            )
+
+            (
+                inserts_df
+                .write
+                .format("delta")
+                .mode("append")
+                .saveAsTable(target_table)
+            )
+
+        
 
 
 # METADATA ********************
