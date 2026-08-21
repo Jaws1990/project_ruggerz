@@ -17,13 +17,5 @@
         }
       }
     }
-  },
-  "command": {
-    "operation": "compile",
-    "arguments": {
-      "exclude": "",
-      "failFast": true,
-      "threads": 4
-    }
   }
 }
