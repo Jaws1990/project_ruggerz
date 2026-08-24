@@ -1,0 +1,209 @@
+table fact_games
+	lineageTag: 51a27f3e-d70b-4f60-a896-46058b5ed536
+	sourceLineageTag: [gold].[fact_games]
+
+	column game_key
+		dataType: int64
+		formatString: 0
+		lineageTag: ad09961c-697d-4e4d-a7fb-5429d02bef23
+		sourceLineageTag: game_key
+		summarizeBy: sum
+		sourceColumn: game_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column kick_off_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1611ec80-9fc5-4bf5-bbf4-951556b340bb
+		sourceLineageTag: kick_off_date
+		summarizeBy: none
+		sourceColumn: kick_off_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column kick_off_time
+		dataType: string
+		lineageTag: c9fee067-d2fc-4385-afb8-f6c92c81b6ca
+		sourceLineageTag: kick_off_time
+		summarizeBy: none
+		sourceColumn: kick_off_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column game_week
+		dataType: int64
+		formatString: 0
+		lineageTag: 3e23825d-4926-4882-a794-1716db6f5b39
+		sourceLineageTag: game_week
+		summarizeBy: sum
+		sourceColumn: game_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 230bf957-6e4d-482f-8581-9cb9ba497276
+		sourceLineageTag: home_score
+		summarizeBy: sum
+		sourceColumn: home_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column away_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 3dfbfdf4-a01f-44d6-8754-4f2aa3fe0698
+		sourceLineageTag: away_score
+		summarizeBy: sum
+		sourceColumn: away_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column game_status
+		dataType: string
+		lineageTag: bff27a5d-bc62-4596-8547-84306bdc0d46
+		sourceLineageTag: game_status
+		summarizeBy: none
+		sourceColumn: game_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_half_home_score
+		dataType: int64
+		formatString: 0
+		lineageTag: d3cb1a66-e410-4d7b-a890-7340e291cb78
+		sourceLineageTag: first_half_home_score
+		summarizeBy: sum
+		sourceColumn: first_half_home_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_half_away_score
+		dataType: int64
+		formatString: 0
+		lineageTag: ff44ddb6-9610-4da6-b671-0fdc948b878d
+		sourceLineageTag: first_half_away_score
+		summarizeBy: sum
+		sourceColumn: first_half_away_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column second_half_home_score
+		dataType: int64
+		formatString: 0
+		lineageTag: c3b56e41-4059-4717-b421-46cbe8040a85
+		sourceLineageTag: second_half_home_score
+		summarizeBy: sum
+		sourceColumn: second_half_home_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column second_half_away_score
+		dataType: int64
+		formatString: 0
+		lineageTag: b55e225f-c3cb-4024-9c59-92952983e1d9
+		sourceLineageTag: second_half_away_score
+		summarizeBy: sum
+		sourceColumn: second_half_away_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column overtime_home_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 9c0bcf75-e17e-4595-a695-c0e6c11997a7
+		sourceLineageTag: overtime_home_score
+		summarizeBy: sum
+		sourceColumn: overtime_home_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column overtime_away_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 505531a5-aeb5-45c3-8e9e-40bf51fda008
+		sourceLineageTag: overtime_away_score
+		summarizeBy: sum
+		sourceColumn: overtime_away_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column second_overtime_home_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 8f574307-10f0-4438-b684-253feba5e3a3
+		sourceLineageTag: second_overtime_home_score
+		summarizeBy: sum
+		sourceColumn: second_overtime_home_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column second_overtime_away_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 43355c2e-f82e-4598-b179-944d69b00427
+		sourceLineageTag: second_overtime_away_score
+		summarizeBy: sum
+		sourceColumn: second_overtime_away_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_team_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 43d3ae06-24fe-43ca-94bf-6eb4dca6cc66
+		sourceLineageTag: home_team_key
+		summarizeBy: sum
+		sourceColumn: home_team_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column away_team_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b2f09bd3-2ed8-4937-956e-35e2f3af4041
+		sourceLineageTag: away_team_key
+		summarizeBy: sum
+		sourceColumn: away_team_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column competition_season_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1cf17548-18ee-448c-9248-7a31115370e4
+		sourceLineageTag: competition_season_key
+		summarizeBy: none
+		sourceColumn: competition_season_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column competition_key
+		dataType: int64
+		formatString: 0
+		lineageTag: d6783a23-70e1-49d4-b15d-64a30afd14db
+		sourceLineageTag: competition_key
+		summarizeBy: none
+		sourceColumn: competition_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column loaded_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 31ce3ce8-9bd6-433f-a9b1-3a66945d4dce
+		sourceLineageTag: loaded_at
+		summarizeBy: none
+		sourceColumn: loaded_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_games = entity
+		mode: directLake
+		source
+			entityName: fact_games
+			schemaName: gold
+			expressionSource: 'DirectLake - PR_Lakehouse_01'
+

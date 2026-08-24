@@ -1,0 +1,88 @@
+table dim_competitions
+	lineageTag: 470aa566-8616-49ea-90b3-e85169d88a24
+	sourceLineageTag: [gold].[dim_competitions]
+
+	column competition_key
+		dataType: int64
+		formatString: 0
+		lineageTag: e151f579-1d35-4c32-8f79-0af9bbe2455d
+		sourceLineageTag: competition_key
+		summarizeBy: none
+		sourceColumn: competition_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column competition_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3690690c-e8d7-4bfe-9f2c-b3903ff2f1ea
+		sourceLineageTag: competition_id
+		summarizeBy: sum
+		sourceColumn: competition_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column competition_name
+		dataType: string
+		lineageTag: f1345ee9-7991-4ab8-8103-86f1038893e0
+		sourceLineageTag: competition_name
+		summarizeBy: none
+		sourceColumn: competition_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column competition_type
+		dataType: string
+		lineageTag: 9c7d880e-610e-4137-8671-57c4e69af1d9
+		sourceLineageTag: competition_type
+		summarizeBy: none
+		sourceColumn: competition_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column logo
+		dataType: string
+		lineageTag: 1117c606-f02f-4cbc-b36a-40d73d48a43e
+		sourceLineageTag: logo
+		summarizeBy: none
+		sourceColumn: logo
+
+		annotation SummarizationSetBy = Automatic
+
+	column valid_from
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7ea6e610-accc-49ff-b736-7e59e8a33930
+		sourceLineageTag: valid_from
+		summarizeBy: none
+		sourceColumn: valid_from
+
+		annotation SummarizationSetBy = Automatic
+
+	column valid_to
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 34734195-fb93-4d0f-8215-091883463421
+		sourceLineageTag: valid_to
+		summarizeBy: none
+		sourceColumn: valid_to
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_current
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 141fb10b-e1b2-417e-ad93-cdedc20a1e66
+		sourceLineageTag: is_current
+		summarizeBy: none
+		sourceColumn: is_current
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_competitions = entity
+		mode: directLake
+		source
+			entityName: dim_competitions
+			schemaName: gold
+			expressionSource: 'DirectLake - PR_Lakehouse_01'
+

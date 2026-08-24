@@ -1,0 +1,117 @@
+table dim_teams
+	lineageTag: 933be460-72e6-4c82-9882-0395d7734dec
+	sourceLineageTag: [gold].[dim_teams]
+
+	column team_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 21c176df-2591-4606-a43f-912130d20025
+		sourceLineageTag: team_key
+		summarizeBy: sum
+		sourceColumn: team_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column team_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 169e77a0-06b1-4a20-b2e1-037569f76ccf
+		sourceLineageTag: team_id
+		summarizeBy: sum
+		sourceColumn: team_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column team_name
+		dataType: string
+		lineageTag: dd7a0147-d71a-4cba-927f-a8513d5cfc25
+		sourceLineageTag: team_name
+		summarizeBy: none
+		sourceColumn: team_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_national
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 2537bf1a-1286-4603-a823-cb3299426544
+		sourceLineageTag: is_national
+		summarizeBy: none
+		sourceColumn: is_national
+
+		annotation SummarizationSetBy = Automatic
+
+	column logo
+		dataType: string
+		lineageTag: 527008d1-bd11-447d-bac3-1cb46daa1888
+		sourceLineageTag: logo
+		summarizeBy: none
+		sourceColumn: logo
+
+		annotation SummarizationSetBy = Automatic
+
+	column founded
+		dataType: int64
+		formatString: 0
+		lineageTag: a6352d2b-28bb-4ac2-b53c-840efe1e159d
+		sourceLineageTag: founded
+		summarizeBy: sum
+		sourceColumn: founded
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_name
+		dataType: string
+		lineageTag: c96c13cf-7731-41e0-b485-9e48ec3299e7
+		sourceLineageTag: country_name
+		summarizeBy: none
+		sourceColumn: country_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column country_flag
+		dataType: string
+		lineageTag: 7502890b-946f-44ca-8a7d-13dfd6dc8969
+		sourceLineageTag: country_flag
+		summarizeBy: none
+		sourceColumn: country_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column valid_from
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 5cae2e67-d92b-4706-a71d-084735dcfc38
+		sourceLineageTag: valid_from
+		summarizeBy: none
+		sourceColumn: valid_from
+
+		annotation SummarizationSetBy = Automatic
+
+	column valid_to
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2848032a-e0e5-47b2-907a-503eb78cde79
+		sourceLineageTag: valid_to
+		summarizeBy: none
+		sourceColumn: valid_to
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_current
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d1c15c2e-6c75-4432-a827-f0efafdbf7a8
+		sourceLineageTag: is_current
+		summarizeBy: none
+		sourceColumn: is_current
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_teams = entity
+		mode: directLake
+		source
+			entityName: dim_teams
+			schemaName: gold
+			expressionSource: 'DirectLake - PR_Lakehouse_01'
+

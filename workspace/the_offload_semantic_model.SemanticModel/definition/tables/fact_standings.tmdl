@@ -1,0 +1,214 @@
+table fact_standings
+	lineageTag: 295ad5da-6707-47b9-b537-7895efbd5b4e
+	sourceLineageTag: [gold].[fact_standings]
+
+	column standings_key
+		dataType: int64
+		formatString: 0
+		lineageTag: f99e4508-e772-43c0-8056-ad81b1577030
+		sourceLineageTag: standings_key
+		summarizeBy: sum
+		sourceColumn: standings_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column snapshot_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0baa3a2e-cd0d-42ac-aa9d-f56a48d382dd
+		sourceLineageTag: snapshot_date
+		summarizeBy: none
+		sourceColumn: snapshot_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column position
+		dataType: int64
+		formatString: 0
+		lineageTag: d7270ef7-8ba9-48d2-88cb-dfeb707aa46b
+		sourceLineageTag: position
+		summarizeBy: sum
+		sourceColumn: position
+
+		annotation SummarizationSetBy = Automatic
+
+	column points
+		dataType: int64
+		formatString: 0
+		lineageTag: 33ac6425-ab95-4979-98d4-2278011a2b9d
+		sourceLineageTag: points
+		summarizeBy: sum
+		sourceColumn: points
+
+		annotation SummarizationSetBy = Automatic
+
+	column points_for
+		dataType: int64
+		formatString: 0
+		lineageTag: ca7d7376-d096-4a1c-bdd1-5c91812d3ecc
+		sourceLineageTag: points_for
+		summarizeBy: sum
+		sourceColumn: points_for
+
+		annotation SummarizationSetBy = Automatic
+
+	column points_against
+		dataType: int64
+		formatString: 0
+		lineageTag: 353c9ca8-d1d5-4095-bc0e-1d5fdac9f291
+		sourceLineageTag: points_against
+		summarizeBy: sum
+		sourceColumn: points_against
+
+		annotation SummarizationSetBy = Automatic
+
+	column games_played
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a62d64a-1abb-47a0-9253-c84b31fa552b
+		sourceLineageTag: games_played
+		summarizeBy: sum
+		sourceColumn: games_played
+
+		annotation SummarizationSetBy = Automatic
+
+	column games_won
+		dataType: int64
+		formatString: 0
+		lineageTag: f2007a98-cc63-4bbc-b85a-81991fc2fe55
+		sourceLineageTag: games_won
+		summarizeBy: sum
+		sourceColumn: games_won
+
+		annotation SummarizationSetBy = Automatic
+
+	column games_lost
+		dataType: int64
+		formatString: 0
+		lineageTag: 85e07b81-9d6e-4d2a-af2f-56e21e46d2a0
+		sourceLineageTag: games_lost
+		summarizeBy: sum
+		sourceColumn: games_lost
+
+		annotation SummarizationSetBy = Automatic
+
+	column games_drawn
+		dataType: int64
+		formatString: 0
+		lineageTag: 68f8107f-5b72-4532-9d67-0e4951c6e380
+		sourceLineageTag: games_drawn
+		summarizeBy: sum
+		sourceColumn: games_drawn
+
+		annotation SummarizationSetBy = Automatic
+
+	column won_percentage
+		dataType: decimal
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 78f3393e-4902-4b19-bd7f-39ab0402b936
+		sourceLineageTag: won_percentage
+		summarizeBy: sum
+		sourceColumn: won_percentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column lost_percentage
+		dataType: decimal
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 0465ec48-4f30-486e-ae3b-505bfba11f39
+		sourceLineageTag: lost_percentage
+		summarizeBy: sum
+		sourceColumn: lost_percentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column drawn_percentage
+		dataType: decimal
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: f5b4a263-d3de-4c0e-b453-61621738c8ef
+		sourceLineageTag: drawn_percentage
+		summarizeBy: sum
+		sourceColumn: drawn_percentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column form
+		dataType: string
+		lineageTag: f3ddf9ed-9b1d-4e5e-a281-aed935c3b416
+		sourceLineageTag: form
+		summarizeBy: none
+		sourceColumn: form
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		lineageTag: 453659d7-8e58-4220-a937-b9720347ff80
+		sourceLineageTag: description
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	column group_name
+		dataType: string
+		lineageTag: 64bff6ff-0e34-4660-adef-5ec5b2625aa5
+		sourceLineageTag: group_name
+		summarizeBy: none
+		sourceColumn: group_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column team_key
+		dataType: int64
+		formatString: 0
+		lineageTag: acfb8af1-999b-4b83-b447-fb917483acc4
+		sourceLineageTag: team_key
+		summarizeBy: sum
+		sourceColumn: team_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column competition_season_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 2f733f06-d154-472f-90d1-e8e46c7607d5
+		sourceLineageTag: competition_season_key
+		summarizeBy: none
+		sourceColumn: competition_season_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column competition_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 3bc0ba76-a423-45ce-9e29-ddc0f3da5919
+		sourceLineageTag: competition_key
+		summarizeBy: none
+		sourceColumn: competition_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column loaded_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4ed2ae2b-b4bc-4bea-8077-05634ef1dace
+		sourceLineageTag: loaded_at
+		summarizeBy: none
+		sourceColumn: loaded_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_standings = entity
+		mode: directLake
+		source
+			entityName: fact_standings
+			schemaName: gold
+			expressionSource: 'DirectLake - PR_Lakehouse_01'
+
