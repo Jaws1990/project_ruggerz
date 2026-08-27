@@ -50,3 +50,25 @@ SQL cells are written as PySpark `%%sql` magic cells (`# MAGIC %%sql` prefix on 
 - **Gold**: dbt builds the star schema and surrogate keys on top of already-historicised Silver tables. dbt snapshots are deliberately not used, since Silver already owns change-tracking. Surrogate keys use the `_key_` naming convention (e.g. `competition_season_key`), generated via `xxhash64` over the natural key columns when natural keys are not suitable.
 
 Orchestration is via Fabric Data Pipelines triggering notebooks — nothing is intended to run ad hoc in production.
+
+## Active work in progress (as of 2026-08-27)
+
+**Goal:** build a Power BI report ("The Offload") on top of the Gold star schema, via the `powerbi-authoring` skill family (`powerbi-report-design` → `semantic-model-authoring` → `powerbi-report-authoring`).
+
+**Semantic model:** `workspace/the_offload_semantic_model.SemanticModel` (Direct Lake, TMDL, 8 tables: `fact_games`, `fact_standings`, `dim_teams`, `dim_competitions`, `dim_competition_seasons`, `dim_game_dates`, `dim_snapshot_dates`, `bridge_game_team`). Relationships are now correctly wired (including `fact_standings.team_key -> dim_teams.team_key` and the `bridge_game_team` many-to-many for `fact_games` ↔ `dim_teams`). `fact_games.home_team_key`/`away_team_key` remain unwired orphan columns — not currently blocking anything, since no measure built so far needs home/away team identity directly on `fact_games`.
+
+**Measures work — currently paused mid-batch.** Full roadmap (4 batches, naming conventions, rationale) is in the plan file `C:\Users\luke_\.claude\plans\ok-the-model-tables-woolly-summit.md` — **read this first** when resuming. Status:
+- Batch 1 (`displayFolder: "Freshness"`): `Count of Games` and `Latest Kick Off Date` are written to `workspace/the_offload_semantic_model.SemanticModel/definition/tables/fact_games.tmdl` (done, on disk). `Count of Standings Snapshots` was created in an MCP in-memory session but **not yet written to `fact_standings.tmdl`** — the file on disk still has zero measures. Do this first when resuming: add
+  ```
+  /// Number of standings snapshot rows in current filter context.
+  measure 'Count of Standings Snapshots' = COUNTROWS(fact_standings)
+  	formatString: #,0
+  	displayFolder: Freshness
+  	lineageTag: 17c74239-b492-4910-85af-589518ff2c80
+  ```
+  right after the `table fact_standings` header block (before `column standings_key`).
+- Batches 2–4 (game scoring %s, current-snapshot standings measures, rank-movement/volatility measures) not started. Batch 3 also includes fixing `fact_standings.won_percentage`/`lost_percentage`/`drawn_percentage`, which are still wrongly formatted as GBP currency instead of percentage.
+
+**Mechanics note:** the `powerbi-modeling-mcp` MCP tool works against this folder via `connection_operations` `ConnectFolder` (path: `workspace/the_offload_semantic_model.SemanticModel`), but it only edits an **in-memory** copy — changes must be exported (`measure_operations`/`table_operations` `ExportTMDL`) and hand-written back into the `.tmdl` files on disk to actually persist, since there's no live Fabric/Desktop connection in this environment. A fresh chat means a fresh MCP session with no memory of measures already created in-memory in a prior session — always verify what's actually on disk before assuming a measure exists.
+
+**Report design (not yet persisted to a file):** a full `Design Brief:` YAML contract (tone: "Sports Broadcast", signature: status-coded W/L/D coloring, 2 pages — "Standings & Form" and "Fixtures & Results" — with full layout_contract geometry) was produced collaboratively in chat but **only exists in that conversation's history**, not saved anywhere in the repo. If resuming report design/authoring work and that conversation isn't available, the brief will need to be re-derived or re-discussed with the user rather than assumed to exist. No PBIP/Report files exist yet — `powerbi-report-authoring` hasn't been invoked.

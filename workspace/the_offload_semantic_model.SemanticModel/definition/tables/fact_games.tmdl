@@ -2,6 +2,18 @@ table fact_games
 	lineageTag: 51a27f3e-d70b-4f60-a896-46058b5ed536
 	sourceLineageTag: [gold].[fact_games]
 
+	/// Number of games in current filter context.
+	measure 'Count of Games' = COUNTROWS(fact_games)
+		formatString: #,0
+		displayFolder: Freshness
+		lineageTag: 40a4fe28-8354-466c-b1d1-fc9695dc4567
+
+	/// Most recent kick-off date in current filter context — indicates how up to date the fixture/results data is.
+	measure 'Latest Kick Off Date' = LASTDATE(fact_games[kick_off_date])
+		formatString: General Date
+		displayFolder: Freshness
+		lineageTag: 436d4fa5-558c-473d-a5aa-1b9d13a6e4aa
+
 	column game_key
 		dataType: int64
 		formatString: 0

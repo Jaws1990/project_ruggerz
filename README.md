@@ -62,7 +62,7 @@ event_date >= valid_from AND event_date < valid_to
 ```
 `competition_seasons` resolved via plain join (not inline hash) — enforces referential integrity, testable.
 
-**`dim_dates`:** built with `dbt_utils.date_spine()`, rolling end = `current_date() + 1 year`, full `table` rebuild each run.
+**`dim_dates`:** built with `dbt_utils.date_spine()`, rolling end = `current_date() + 1 year`, this is the parent dataset for both the `dim_game_dates` and `dim_snapshot_dates` tables. It is never persisted to the lakehouse. 2 separate date tables for user simplicity rather than being a role playing date dimension table. 2 physical tables chosen because we are using direct lake and low storage impact. 
 
 **Materialization:**
 
@@ -95,7 +95,7 @@ event_date >= valid_from AND event_date < valid_to
 - [x] Lakehouse CSV — league scope config
 - [x] dbt-fabric project setup, connected to Silver
 - [x] Gold: dimension models with surrogate keys
-- [ ] Gold: fact models (games, standings)
+- [x] Gold: fact models (games, standings)
 - [ ] Power BI semantic model
 - [ ] Power BI report
 
