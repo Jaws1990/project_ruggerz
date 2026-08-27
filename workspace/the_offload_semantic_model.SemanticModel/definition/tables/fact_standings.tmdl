@@ -170,7 +170,7 @@ table fact_standings
 		formatString: 0
 		lineageTag: acfb8af1-999b-4b83-b447-fb917483acc4
 		sourceLineageTag: team_key
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: team_key
 
 		annotation SummarizationSetBy = Automatic

@@ -7,7 +7,7 @@ table fact_games
 		formatString: 0
 		lineageTag: ad09961c-697d-4e4d-a7fb-5429d02bef23
 		sourceLineageTag: game_key
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: game_key
 
 		annotation SummarizationSetBy = Automatic

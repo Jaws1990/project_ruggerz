@@ -10,12 +10,14 @@ annotation __PBI_TimeIntelligenceEnabled = 1
 
 annotation PBI_QueryOrder = ["DirectLake - PR_Lakehouse_01"]
 
-annotation PBI_ProTooling = ["RemoteModeling","DirectLakeOnOneLakeCreatedInDesktop"]
+annotation PBI_ProTooling = ["RemoteModeling","DirectLakeOnOneLakeCreatedInDesktop","DirectLakeOnOneLakeInWeb","WebModelingEdit"]
 
 ref table dim_competition_seasons
 ref table fact_games
 ref table fact_standings
 ref table dim_teams
-ref table dim_dates
 ref table dim_competitions
+ref table bridge_game_team
+ref table dim_game_dates
+ref table dim_snapshot_dates
 

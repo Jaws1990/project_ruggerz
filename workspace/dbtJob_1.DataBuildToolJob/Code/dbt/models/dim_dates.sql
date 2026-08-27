@@ -1,3 +1,5 @@
+{{ config(materialized='ephemeral') }}
+
 with spine as (
     {{ dbt_utils.date_spine(
         datepart="day",
@@ -7,7 +9,7 @@ with spine as (
 )
 
 select
-    cast(date_day as DATE) as date_day,
+    cast(date_day as DATE) as date_key,
     extract(year from date_day)      as year,
     extract(month from date_day)     as month,
     extract(day from date_day)       as day_of_month,

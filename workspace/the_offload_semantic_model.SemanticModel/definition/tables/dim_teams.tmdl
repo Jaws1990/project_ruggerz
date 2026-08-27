@@ -7,7 +7,7 @@ table dim_teams
 		formatString: 0
 		lineageTag: 21c176df-2591-4606-a43f-912130d20025
 		sourceLineageTag: team_key
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: team_key
 
 		annotation SummarizationSetBy = Automatic

@@ -14,7 +14,24 @@ relationship 963b7a61-a9c2-f6aa-ad33-4b5bb0ee6568
 	fromColumn: fact_games.competition_season_key
 	toColumn: dim_competition_seasons.competition_season_key
 
-relationship 0335f6df-b2dd-99da-6cc4-1db71f43a082
+relationship 9dee7c57-a19d-30cf-7d63-88eaa15587f7
+	crossFilteringBehavior: bothDirections
+	fromColumn: bridge_game_team.game_key
+	toColumn: fact_games.game_key
+
+relationship 579b070c-062d-897f-2a88-6bc0b1e4ffe2
+	fromColumn: bridge_game_team.team_key
+	toColumn: dim_teams.team_key
+
+relationship f167195f-f9c1-99ab-155c-2d9ddf55139a
+	fromColumn: fact_standings.team_key
+	toColumn: dim_teams.team_key
+
+relationship 5f86a380-2ea7-5073-9d59-aac63e6a97b8
 	fromColumn: fact_games.kick_off_date
-	toColumn: dim_dates.date_day
+	toColumn: dim_game_dates.game_date
+
+relationship bde244d3-8af5-da32-cd9e-aef75e7016d2
+	fromColumn: fact_standings.snapshot_date
+	toColumn: dim_snapshot_dates.snapshot_date_key
 

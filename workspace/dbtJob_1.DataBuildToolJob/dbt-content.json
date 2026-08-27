@@ -21,7 +21,7 @@
   "command": {
     "operation": "run",
     "arguments": {
-      "select": "fact_standings",
+      "select": "dim_game_dates dim_snapshot_dates dim_dates",
       "failFast": true,
       "threads": 4
     }

@@ -1,0 +1,99 @@
+table dim_game_dates
+	lineageTag: 370567f0-bc77-4a96-8400-28fdd513d98e
+	sourceLineageTag: [gold].[dim_game_dates]
+
+	column game_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d1fcc74f-792c-4c04-a7dc-2c5598c582bf
+		sourceLineageTag: game_date
+		summarizeBy: none
+		sourceColumn: game_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 69df9ec2-dbb1-4729-abfe-bd79a8ba5c73
+		sourceLineageTag: year
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: 84cf1f82-66be-4cc4-b82a-5bb05b833396
+		sourceLineageTag: month
+		summarizeBy: none
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_month
+		dataType: int64
+		formatString: 0
+		lineageTag: cc6635f0-3eb6-4e0a-a842-faca9ded0526
+		sourceLineageTag: day_of_month
+		summarizeBy: none
+		sourceColumn: day_of_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week
+		dataType: int64
+		formatString: 0
+		lineageTag: 83e03758-1a1e-4edc-8891-14e1c528a2a2
+		sourceLineageTag: day_of_week
+		summarizeBy: none
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_name
+		dataType: string
+		lineageTag: 08aa9fc8-2c21-42a9-8a2c-ab3521d4cfd4
+		sourceLineageTag: day_name
+		summarizeBy: none
+		sourceColumn: day_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: b40c0863-4f52-40d5-893f-ff7b6f5014bb
+		sourceLineageTag: month_name
+		summarizeBy: none
+		sourceColumn: month_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f212a0a-d6b4-439d-bec0-9989f8f4625d
+		sourceLineageTag: quarter
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c4dfaf92-5086-470c-8346-1045157426ff
+		sourceLineageTag: is_weekend
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_game_dates = entity
+		mode: directLake
+		source
+			entityName: dim_game_dates
+			schemaName: gold
+			expressionSource: 'DirectLake - PR_Lakehouse_01'
+

@@ -1,6 +1,18 @@
 version: 2
 
 models:
+  - name: bridge_game_team
+    columns:
+      - name: game_key
+        tests:
+          - relationships:
+              to: ref('fact_games')
+              field: game_key
+      - name: team_key
+        tests:
+          - relationships:
+              to: ref('dim_team')
+              field: team_key
   - name: dim_teams
     columns:
       - name: team_key
