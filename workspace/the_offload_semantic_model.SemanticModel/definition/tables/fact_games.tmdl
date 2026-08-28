@@ -14,6 +14,60 @@ table fact_games
 		displayFolder: Freshness
 		lineageTag: 436d4fa5-558c-473d-a5aa-1b9d13a6e4aa
 
+	/// Combined home + away points across all games in context.
+	measure 'Points Scored' = SUMX(fact_games, fact_games[home_score] + fact_games[away_score])
+		formatString: #,0
+		displayFolder: Scoring
+		lineageTag: 70811742-7d71-4b14-be2d-26195b607946
+
+	/// Average combined points scored per game — a scoring-rate indicator for comparing leagues/seasons.
+	measure 'Average Points per Game' = DIVIDE([Points Scored], [Count of Games])
+		formatString: #,0.0
+		displayFolder: Scoring
+		lineageTag: 8587ce44-231c-4018-ab28-026651e90137
+
+	/// Average absolute points difference between winner and loser — a competitiveness indicator (lower = closer games). Reads the stored margin column directly.
+	measure 'Average Winning Margin' = AVERAGEX(fact_games, fact_games[margin])
+		formatString: #,0.0
+		displayFolder: Scoring
+		lineageTag: a04dba5d-2e50-45e3-a6c3-1edcfe74acfb
+
+	/// Count of games won by the home team. Filters the stored `result` column directly (storage-engine scan) rather than comparing home_score/away_score row by row.
+	measure 'Home Wins' = CALCULATE(COUNTROWS(fact_games), fact_games[result] = "Home Win")
+		formatString: #,0
+		displayFolder: Scoring
+		lineageTag: 1fada04f-1e9e-40f6-b0a7-54ba5c57514c
+
+	/// Count of games won by the away team. Filters the stored `result` column directly (storage-engine scan) rather than comparing home_score/away_score row by row.
+	measure 'Away Wins' = CALCULATE(COUNTROWS(fact_games), fact_games[result] = "Away Win")
+		formatString: #,0
+		displayFolder: Scoring
+		lineageTag: dee85e48-e343-4d3a-b48d-0e50d97a4ffb
+
+	/// Count of drawn games. Filters the stored `result` column directly (storage-engine scan) rather than comparing home_score/away_score row by row.
+	measure Draws = CALCULATE(COUNTROWS(fact_games), fact_games[result] = "Draw")
+		formatString: #,0
+		displayFolder: Scoring
+		lineageTag: bcc65f4f-af87-47e9-9495-139f38037a97
+
+	/// Share of games won by the home team — the headline home-advantage stat.
+	measure 'Home Win %' = DIVIDE([Home Wins], [Count of Games])
+		formatString: 0%
+		displayFolder: Scoring
+		lineageTag: 3e6b5da4-055d-4782-bbd3-2fd5f25ef013
+
+	/// Share of games won by the away team.
+	measure 'Away Win %' = DIVIDE([Away Wins], [Count of Games])
+		formatString: 0%
+		displayFolder: Scoring
+		lineageTag: 0729727c-c601-4f8e-af14-c19d5c24bfad
+
+	/// Share of games that ended level.
+	measure 'Draw %' = DIVIDE([Draws], [Count of Games])
+		formatString: 0%
+		displayFolder: Scoring
+		lineageTag: c13e897a-ac62-40f1-9642-1d48f67beb5d
+
 	column game_key
 		dataType: int64
 		formatString: 0
@@ -162,26 +216,6 @@ table fact_games
 
 		annotation SummarizationSetBy = Automatic
 
-	column home_team_key
-		dataType: int64
-		formatString: 0
-		lineageTag: 43d3ae06-24fe-43ca-94bf-6eb4dca6cc66
-		sourceLineageTag: home_team_key
-		summarizeBy: sum
-		sourceColumn: home_team_key
-
-		annotation SummarizationSetBy = Automatic
-
-	column away_team_key
-		dataType: int64
-		formatString: 0
-		lineageTag: b2f09bd3-2ed8-4937-956e-35e2f3af4041
-		sourceLineageTag: away_team_key
-		summarizeBy: sum
-		sourceColumn: away_team_key
-
-		annotation SummarizationSetBy = Automatic
-
 	column competition_season_key
 		dataType: int64
 		formatString: 0
@@ -212,10 +246,38 @@ table fact_games
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Home team's name as of the game's kick-off date (resolved via dim_teams temporal join at ETL time).
+	column home_team_name
+		dataType: string
+		lineageTag: 99f1b278-774e-4c41-9406-f57c3b420091
+		summarizeBy: none
+		sourceColumn: home_team_name
+
+	/// Away team's name as of the game's kick-off date (resolved via dim_teams temporal join at ETL time).
+	column away_team_name
+		dataType: string
+		lineageTag: 4d410428-f12c-49db-be30-04cccb014346
+		summarizeBy: none
+		sourceColumn: away_team_name
+
+	/// Absolute points difference between home and away score. Blank if the game hasn't been played yet.
+	column margin
+		dataType: int64
+		formatString: #,0
+		lineageTag: cd3b27cb-af3b-471a-b0e1-b50239bec7b1
+		summarizeBy: none
+		sourceColumn: margin
+
+	/// 'Home Win', 'Away Win', or 'Draw'. Blank if the game hasn't been played yet (avoids misclassifying future fixtures as draws).
+	column result
+		dataType: string
+		lineageTag: 153b24ca-0679-4610-b8e0-d8a45ccc6c3d
+		summarizeBy: none
+		sourceColumn: result
+
 	partition fact_games = entity
 		mode: directLake
 		source
 			entityName: fact_games
 			schemaName: gold
 			expressionSource: 'DirectLake - PR_Lakehouse_01'
-

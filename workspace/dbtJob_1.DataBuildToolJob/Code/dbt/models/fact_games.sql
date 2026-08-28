@@ -22,8 +22,15 @@ select
     f.overtime_away_score,
     f.second_overtime_home_score,
     f.second_overtime_away_score,
-    t_home.team_key                          as home_team_key,
-    t_away.team_key                          as away_team_key,
+    t_home.team_name                         as home_team_name,
+    t_away.team_name                         as away_team_name,
+    abs(f.home_score - f.away_score)         as margin,
+    case
+        when f.home_score is null or f.away_score is null then null
+        when f.home_score > f.away_score then 'Home Win'
+        when f.away_score > f.home_score then 'Away Win'
+        else 'Draw'
+    end                                       as result,
     comp_s.competition_season_key,
     comp.competition_key,
     CURRENT_TIMESTAMP AS loaded_at

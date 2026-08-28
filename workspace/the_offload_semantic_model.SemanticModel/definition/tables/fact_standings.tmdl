@@ -2,6 +2,108 @@ table fact_standings
 	lineageTag: 295ad5da-6707-47b9-b537-7895efbd5b4e
 	sourceLineageTag: [gold].[fact_standings]
 
+	/// Most recent standings snapshot date in current filter context — the anchor every "current" standings measure below filters to.
+	measure 'Latest Snapshot Date' = LASTDATE(fact_standings[snapshot_date])
+		formatString: General Date
+		displayFolder: Standings - Current
+		lineageTag: f6b41597-732d-4046-a537-3efd2a2a1965
+
+	/// Team's league position as of the latest snapshot (not summed across snapshot history).
+	measure 'Current Position' = CALCULATE(AVERAGE(fact_standings[position]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+		formatString: 0
+		displayFolder: Standings - Current
+		lineageTag: 2c394edc-81d3-43ae-b8c2-ce6c9975f5f3
+
+	/// Team's league points as of the latest snapshot.
+	measure 'Current Points' = CALCULATE(AVERAGE(fact_standings[points]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+		formatString: #,0
+		displayFolder: Standings - Current
+		lineageTag: 8b55a1ff-4100-411c-8237-fe84241982b0
+
+	/// Games played to date as of the latest snapshot.
+	measure 'Current Games Played' = CALCULATE(AVERAGE(fact_standings[games_played]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+		formatString: #,0
+		displayFolder: Standings - Current
+		lineageTag: d3d29b25-f940-44b4-a035-a68a76a5095f
+
+	/// Season win rate as of the latest snapshot.
+	measure 'Current Win %' = CALCULATE(AVERAGE(fact_standings[won_percentage]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+		formatString: 0%
+		displayFolder: Standings - Current
+		lineageTag: fe38eea2-8ce6-44e5-9b7c-c0d1ac7a1859
+
+	/// Season draw rate as of the latest snapshot.
+	measure 'Current Draw %' = CALCULATE(AVERAGE(fact_standings[drawn_percentage]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+		formatString: 0%
+		displayFolder: Standings - Current
+		lineageTag: 57b396f3-71d5-4fe9-b79f-1c1ced977c84
+
+	/// Season loss rate as of the latest snapshot.
+	measure 'Current Loss %' = CALCULATE(AVERAGE(fact_standings[lost_percentage]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+		formatString: 0%
+		displayFolder: Standings - Current
+		lineageTag: f2987d65-bbd8-4aa2-8f34-49755fb00621
+
+	/// Target date exactly one week before the latest snapshot — the point Weekly movement measures compare against.
+	measure 'Weekly Comparison Date' = [Latest Snapshot Date] - 7
+		formatString: General Date
+		displayFolder: Standings - Movement
+		lineageTag: 1566e70d-445e-47af-8ee4-2a847d9ad998
+
+	/// Target date exactly one calendar month before the latest snapshot — the point Monthly movement measures compare against.
+	measure 'Monthly Comparison Date' = EDATE([Latest Snapshot Date], -1)
+		formatString: General Date
+		displayFolder: Standings - Movement
+		lineageTag: 4b8be5e4-aeae-4ed9-8cca-75fddb9fda05
+
+	/// The actual snapshot date matching the weekly comparison target, within the same competition/season. Blank if no snapshot exists exactly 7 days back.
+	measure 'Previous Snapshot Date (Weekly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) RETURN CALCULATE(MAX(fact_standings[snapshot_date]), fact_standings[snapshot_date] = [Weekly Comparison Date], fact_standings[competition_season_key] = SeasonKey)
+		formatString: General Date
+		displayFolder: Standings - Movement
+		lineageTag: d1f1f546-6f78-4d5a-8892-2da738eacc55
+
+	/// The actual snapshot date matching the monthly comparison target, within the same competition/season. Blank if no snapshot exists exactly one month back.
+	measure 'Previous Snapshot Date (Monthly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) RETURN CALCULATE(MAX(fact_standings[snapshot_date]), fact_standings[snapshot_date] = [Monthly Comparison Date], fact_standings[competition_season_key] = SeasonKey)
+		formatString: General Date
+		displayFolder: Standings - Movement
+		lineageTag: 2bd39583-0ae4-41c4-98b7-f261129cca50
+
+	/// Team's league position exactly one week before the latest snapshot, restricted to the same competition and season. Blank if no comparable snapshot exists.
+	measure 'Previous Position (Weekly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) RETURN CALCULATE(AVERAGE(fact_standings[position]), fact_standings[snapshot_date] = [Previous Snapshot Date (Weekly)], fact_standings[competition_season_key] = SeasonKey)
+		formatString: 0
+		displayFolder: Standings - Movement
+		lineageTag: 24716b5b-7f18-4c1d-8429-c92b49c8af25
+
+	/// Team's league position exactly one month before the latest snapshot, restricted to the same competition and season. Blank if no comparable snapshot exists.
+	measure 'Previous Position (Monthly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) RETURN CALCULATE(AVERAGE(fact_standings[position]), fact_standings[snapshot_date] = [Previous Snapshot Date (Monthly)], fact_standings[competition_season_key] = SeasonKey)
+		formatString: 0
+		displayFolder: Standings - Movement
+		lineageTag: 5e9e09d9-7d9e-49c7-a576-7536c092be3b
+
+	/// Places risen (positive) or fallen (negative) over the last week, same competition/season only. Blank when no comparable snapshot exists.
+	measure 'Position Change (Weekly)' = [Previous Position (Weekly)] - [Current Position]
+		formatString: +0;-0;0
+		displayFolder: Standings - Movement
+		lineageTag: 41802c52-4276-49a1-a7d6-a97fccb763c7
+
+	/// Places risen (positive) or fallen (negative) over the last month, same competition/season only. Blank when no comparable snapshot exists.
+	measure 'Position Change (Monthly)' = [Previous Position (Monthly)] - [Current Position]
+		formatString: +0;-0;0
+		displayFolder: Standings - Movement
+		lineageTag: 02ba6444-8c0b-486d-a41f-14ad5a6dbeee
+
+	/// Average absolute rank shift across all teams in the competition/season over the last week — higher means the table is shuffling more. Teams without a week-back snapshot are excluded, not treated as zero movement.
+	measure 'League Volatility (Weekly)' = AVERAGEX(FILTER(VALUES(fact_standings[team_key]), NOT ISBLANK([Position Change (Weekly)])), ABS([Position Change (Weekly)]))
+		formatString: #,0.0
+		displayFolder: Standings - Movement
+		lineageTag: b7f98205-2b51-4178-a540-62be2459d68c
+
+	/// Average absolute rank shift across all teams in the competition/season over the last month — higher means the table is shuffling more. Teams without a month-back snapshot are excluded, not treated as zero movement.
+	measure 'League Volatility (Monthly)' = AVERAGEX(FILTER(VALUES(fact_standings[team_key]), NOT ISBLANK([Position Change (Monthly)])), ABS([Position Change (Monthly)]))
+		formatString: #,0.0
+		displayFolder: Standings - Movement
+		lineageTag: d7bb84bb-6f51-4af2-8b07-aa6ecc3fcae1
+
 	column standings_key
 		dataType: int64
 		formatString: 0
@@ -104,7 +206,7 @@ table fact_standings
 
 	column won_percentage
 		dataType: decimal
-		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		formatString: 0%
 		lineageTag: 78f3393e-4902-4b19-bd7f-39ab0402b936
 		sourceLineageTag: won_percentage
 		summarizeBy: sum
@@ -112,11 +214,9 @@ table fact_standings
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
-
 	column lost_percentage
 		dataType: decimal
-		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		formatString: 0%
 		lineageTag: 0465ec48-4f30-486e-ae3b-505bfba11f39
 		sourceLineageTag: lost_percentage
 		summarizeBy: sum
@@ -124,19 +224,15 @@ table fact_standings
 
 		annotation SummarizationSetBy = Automatic
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
-
 	column drawn_percentage
 		dataType: decimal
-		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		formatString: 0%
 		lineageTag: f5b4a263-d3de-4c0e-b453-61621738c8ef
 		sourceLineageTag: drawn_percentage
 		summarizeBy: sum
 		sourceColumn: drawn_percentage
 
 		annotation SummarizationSetBy = Automatic
-
-		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
 
 	column form
 		dataType: string
@@ -211,4 +307,3 @@ table fact_standings
 			entityName: fact_standings
 			schemaName: gold
 			expressionSource: 'DirectLake - PR_Lakehouse_01'
-
