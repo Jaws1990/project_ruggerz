@@ -44,8 +44,11 @@ table dim_competitions
 		dataType: string
 		lineageTag: 1117c606-f02f-4cbc-b36a-40d73d48a43e
 		sourceLineageTag: logo
+		dataCategory: ImageUrl
 		summarizeBy: none
 		sourceColumn: logo
+
+		changedProperty = DataCategory
 
 		annotation SummarizationSetBy = Automatic
 

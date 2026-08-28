@@ -27,10 +27,12 @@ table dim_competition_seasons
 		formatString: 0
 		lineageTag: 5e0ae664-9b04-4f98-8368-0be17ae39788
 		sourceLineageTag: season
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: season
 
-		annotation SummarizationSetBy = Automatic
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
 
 	column is_current
 		dataType: boolean

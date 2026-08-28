@@ -307,3 +307,4 @@ table fact_standings
 			entityName: fact_standings
 			schemaName: gold
 			expressionSource: 'DirectLake - PR_Lakehouse_01'
+

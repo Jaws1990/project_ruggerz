@@ -17,10 +17,12 @@ table dim_teams
 		formatString: 0
 		lineageTag: 169e77a0-06b1-4a20-b2e1-037569f76ccf
 		sourceLineageTag: team_id
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: team_id
 
-		annotation SummarizationSetBy = Automatic
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
 
 	column team_name
 		dataType: string
@@ -45,8 +47,11 @@ table dim_teams
 		dataType: string
 		lineageTag: 527008d1-bd11-447d-bac3-1cb46daa1888
 		sourceLineageTag: logo
+		dataCategory: ImageUrl
 		summarizeBy: none
 		sourceColumn: logo
+
+		changedProperty = DataCategory
 
 		annotation SummarizationSetBy = Automatic
 
@@ -55,10 +60,12 @@ table dim_teams
 		formatString: 0
 		lineageTag: a6352d2b-28bb-4ac2-b53c-840efe1e159d
 		sourceLineageTag: founded
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: founded
 
-		annotation SummarizationSetBy = Automatic
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
 
 	column country_name
 		dataType: string

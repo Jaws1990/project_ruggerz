@@ -80,13 +80,17 @@ table fact_games
 
 	column kick_off_date
 		dataType: dateTime
-		formatString: General Date
+		formatString: dd mmmm yyyy
 		lineageTag: 1611ec80-9fc5-4bf5-bbf4-951556b340bb
 		sourceLineageTag: kick_off_date
 		summarizeBy: none
 		sourceColumn: kick_off_date
 
+		changedProperty = FormatString
+
 		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
 
 	column kick_off_time
 		dataType: string
@@ -281,3 +285,4 @@ table fact_games
 			entityName: fact_games
 			schemaName: gold
 			expressionSource: 'DirectLake - PR_Lakehouse_01'
+

@@ -1,0 +1,382 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "350a0afc272ce30c1a2d",
+  "position": {
+    "x": 292,
+    "y": 532,
+    "z": 3,
+    "height": 532,
+    "width": 1612,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_games"
+                    }
+                  },
+                  "Property": "kick_off_date"
+                }
+              },
+              "queryRef": "fact_games.kick_off_date",
+              "nativeQueryRef": "kick_off_date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_competitions"
+                    }
+                  },
+                  "Property": "competition_name"
+                }
+              },
+              "queryRef": "dim_competitions.competition_name",
+              "nativeQueryRef": "competition_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_games"
+                    }
+                  },
+                  "Property": "home_team_name"
+                }
+              },
+              "queryRef": "fact_games.home_team_name",
+              "nativeQueryRef": "home_team_name"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "fact_games"
+                        }
+                      },
+                      "Property": "home_score"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(fact_games.home_score)",
+              "nativeQueryRef": "home_score"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_games"
+                    }
+                  },
+                  "Property": "away_team_name"
+                }
+              },
+              "queryRef": "fact_games.away_team_name",
+              "nativeQueryRef": "away_team_name"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "fact_games"
+                        }
+                      },
+                      "Property": "away_score"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(fact_games.away_score)",
+              "nativeQueryRef": "away_score"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_games"
+                    }
+                  },
+                  "Property": "Points Scored"
+                }
+              },
+              "queryRef": "fact_games.Points Scored",
+              "nativeQueryRef": "Points Scored"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_games"
+                  }
+                },
+                "Property": "Points Scored"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "columnAdjustment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'growToFit'"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F2F3F5'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#232634'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F2F3F5'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F2F3F5'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#14161F'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1D2130'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "stylePreset": [
+        {
+          "properties": {
+            "name": {
+              "expr": {
+                "Literal": {
+                  "Value": "'None'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "0dc95b73ccb07cb1f88d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_games"
+              }
+            },
+            "Property": "kick_off_date"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "8b3520af8dfea3fdf305",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_competitions"
+              }
+            },
+            "Property": "competition_name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "466905b17aa1d224d594",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_games"
+              }
+            },
+            "Property": "home_team_name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "4cd957bc2735f38812e2",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_games"
+                  }
+                },
+                "Property": "home_score"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "b3b7f7815ddc7c804247",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_games"
+              }
+            },
+            "Property": "away_team_name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "e6c6428c93cb6583ea67",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_games"
+                  }
+                },
+                "Property": "away_score"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "e519d4c45aef6fcdfff3",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_games"
+              }
+            },
+            "Property": "Points Scored"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}
