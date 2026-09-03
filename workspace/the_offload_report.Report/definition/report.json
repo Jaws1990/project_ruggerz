@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
   "themeCollection": {
     "customTheme": {
-      "name": "TheOffloadScoreboard-1fa3b0f0.json",
+      "name": "TheOffloadScoreboard-7c2f91ae.32941534938871275.json",
       "reportVersionAtImport": {
-        "visual": "2.6.0",
-        "report": "3.1.0",
-        "page": "2.3.0"
+        "visual": "2.12.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
       },
       "type": "RegisteredResources"
     }
@@ -32,8 +32,8 @@
       "type": "RegisteredResources",
       "items": [
         {
-          "name": "TheOffloadScoreboard-1fa3b0f0.json",
-          "path": "TheOffloadScoreboard-1fa3b0f0.json",
+          "name": "TheOffloadScoreboard-7c2f91ae.32941534938871275.json",
+          "path": "TheOffloadScoreboard-7c2f91ae.32941534938871275.json",
           "type": "CustomTheme"
         }
       ]

@@ -9,73 +9,76 @@ table fact_standings
 		lineageTag: f6b41597-732d-4046-a537-3efd2a2a1965
 
 	/// Team's league position as of the latest snapshot (not summed across snapshot history).
-	measure 'Current Position' = CALCULATE(AVERAGE(fact_standings[position]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+	measure 'Current Position' = ```
+			VAR _SnapshotDate = [Latest Snapshot Date] 
+			RETURN CALCULATE(AVERAGE(fact_standings[position]), fact_standings[snapshot_date] = _SnapshotDate)
+			```
 		formatString: 0
 		displayFolder: Standings - Current
 		lineageTag: 2c394edc-81d3-43ae-b8c2-ce6c9975f5f3
 
 	/// Team's league points as of the latest snapshot.
-	measure 'Current Points' = CALCULATE(AVERAGE(fact_standings[points]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+	measure 'Current Points' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[points]), fact_standings[snapshot_date] = _SnapshotDate)
 		formatString: #,0
 		displayFolder: Standings - Current
 		lineageTag: 8b55a1ff-4100-411c-8237-fe84241982b0
 
 	/// Games played to date as of the latest snapshot.
-	measure 'Current Games Played' = CALCULATE(AVERAGE(fact_standings[games_played]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+	measure 'Current Games Played' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[games_played]), fact_standings[snapshot_date] = _SnapshotDate)
 		formatString: #,0
 		displayFolder: Standings - Current
 		lineageTag: d3d29b25-f940-44b4-a035-a68a76a5095f
 
 	/// Season win rate as of the latest snapshot.
-	measure 'Current Win %' = CALCULATE(AVERAGE(fact_standings[won_percentage]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+	measure 'Current Win %' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[won_percentage]), fact_standings[snapshot_date] = _SnapshotDate)
 		formatString: 0%
 		displayFolder: Standings - Current
 		lineageTag: fe38eea2-8ce6-44e5-9b7c-c0d1ac7a1859
 
 	/// Season draw rate as of the latest snapshot.
-	measure 'Current Draw %' = CALCULATE(AVERAGE(fact_standings[drawn_percentage]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+	measure 'Current Draw %' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[drawn_percentage]), fact_standings[snapshot_date] = _SnapshotDate)
 		formatString: 0%
 		displayFolder: Standings - Current
 		lineageTag: 57b396f3-71d5-4fe9-b79f-1c1ced977c84
 
 	/// Season loss rate as of the latest snapshot.
-	measure 'Current Loss %' = CALCULATE(AVERAGE(fact_standings[lost_percentage]), fact_standings[snapshot_date] = [Latest Snapshot Date])
+	measure 'Current Loss %' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[lost_percentage]), fact_standings[snapshot_date] = _SnapshotDate)
 		formatString: 0%
 		displayFolder: Standings - Current
 		lineageTag: f2987d65-bbd8-4aa2-8f34-49755fb00621
 
-	/// Target date exactly one week before the latest snapshot — the point Weekly movement measures compare against.
+	/// Target date exactly one week before the latest snapshot — the point Weekly movement measures compare against. Not necessarily a real snapshot date; see 'Previous Snapshot Date (Weekly)'.
 	measure 'Weekly Comparison Date' = [Latest Snapshot Date] - 7
 		formatString: General Date
 		displayFolder: Standings - Movement
 		lineageTag: 1566e70d-445e-47af-8ee4-2a847d9ad998
 
-	/// Target date exactly one calendar month before the latest snapshot — the point Monthly movement measures compare against.
+	/// Target date exactly one calendar month before the latest snapshot — the point Monthly movement measures compare against. Not necessarily a real snapshot date; see 'Previous Snapshot Date (Monthly)'.
 	measure 'Monthly Comparison Date' = EDATE([Latest Snapshot Date], -1)
 		formatString: General Date
 		displayFolder: Standings - Movement
 		lineageTag: 4b8be5e4-aeae-4ed9-8cca-75fddb9fda05
 
-	/// The actual snapshot date matching the weekly comparison target, within the same competition/season. Blank if no snapshot exists exactly 7 days back.
-	measure 'Previous Snapshot Date (Weekly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) RETURN CALCULATE(MAX(fact_standings[snapshot_date]), fact_standings[snapshot_date] = [Weekly Comparison Date], fact_standings[competition_season_key] = SeasonKey)
+	/// Closest actual snapshot on or before the weekly comparison target, within the same competition/season — snapshots aren't guaranteed to land exactly 7 days apart, so an exact-date match would go blank around irregular pulls (e.g. month boundaries). Blank only if no earlier snapshot exists in the season.
+	measure 'Previous Snapshot Date (Weekly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) VAR TargetDate = [Weekly Comparison Date] RETURN CALCULATE(MAX(fact_standings[snapshot_date]), fact_standings[snapshot_date] <= TargetDate, fact_standings[competition_season_key] = SeasonKey)
 		formatString: General Date
 		displayFolder: Standings - Movement
 		lineageTag: d1f1f546-6f78-4d5a-8892-2da738eacc55
 
-	/// The actual snapshot date matching the monthly comparison target, within the same competition/season. Blank if no snapshot exists exactly one month back.
-	measure 'Previous Snapshot Date (Monthly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) RETURN CALCULATE(MAX(fact_standings[snapshot_date]), fact_standings[snapshot_date] = [Monthly Comparison Date], fact_standings[competition_season_key] = SeasonKey)
+	/// Closest actual snapshot on or before the monthly comparison target, within the same competition/season — snapshots aren't guaranteed to land exactly one calendar month apart, so an exact-date match would go blank around irregular pulls. Blank only if no earlier snapshot exists in the season.
+	measure 'Previous Snapshot Date (Monthly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) VAR TargetDate = [Monthly Comparison Date] RETURN CALCULATE(MAX(fact_standings[snapshot_date]), fact_standings[snapshot_date] <= TargetDate, fact_standings[competition_season_key] = SeasonKey)
 		formatString: General Date
 		displayFolder: Standings - Movement
 		lineageTag: 2bd39583-0ae4-41c4-98b7-f261129cca50
 
-	/// Team's league position exactly one week before the latest snapshot, restricted to the same competition and season. Blank if no comparable snapshot exists.
-	measure 'Previous Position (Weekly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) RETURN CALCULATE(AVERAGE(fact_standings[position]), fact_standings[snapshot_date] = [Previous Snapshot Date (Weekly)], fact_standings[competition_season_key] = SeasonKey)
+	/// Team's league position at the closest snapshot on or before the weekly comparison target, restricted to the same competition and season. Blank if no comparable snapshot exists.
+	measure 'Previous Position (Weekly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) VAR PrevSnapshotDate = [Previous Snapshot Date (Weekly)] RETURN CALCULATE(AVERAGE(fact_standings[position]), fact_standings[snapshot_date] = PrevSnapshotDate, fact_standings[competition_season_key] = SeasonKey)
 		formatString: 0
 		displayFolder: Standings - Movement
 		lineageTag: 24716b5b-7f18-4c1d-8429-c92b49c8af25
 
-	/// Team's league position exactly one month before the latest snapshot, restricted to the same competition and season. Blank if no comparable snapshot exists.
-	measure 'Previous Position (Monthly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) RETURN CALCULATE(AVERAGE(fact_standings[position]), fact_standings[snapshot_date] = [Previous Snapshot Date (Monthly)], fact_standings[competition_season_key] = SeasonKey)
+	/// Team's league position at the closest snapshot on or before the monthly comparison target, restricted to the same competition and season. Blank if no comparable snapshot exists.
+	measure 'Previous Position (Monthly)' = VAR SeasonKey = SELECTEDVALUE(fact_standings[competition_season_key]) VAR PrevSnapshotDate = [Previous Snapshot Date (Monthly)] RETURN CALCULATE(AVERAGE(fact_standings[position]), fact_standings[snapshot_date] = PrevSnapshotDate, fact_standings[competition_season_key] = SeasonKey)
 		formatString: 0
 		displayFolder: Standings - Movement
 		lineageTag: 5e9e09d9-7d9e-49c7-a576-7536c092be3b
@@ -105,17 +108,42 @@ table fact_standings
 		lineageTag: d7bb84bb-6f51-4af2-8b07-aa6ecc3fcae1
 
 	/// Points scored per game by a single team as of the latest snapshot — not the combined score of both sides in a fixture.
-	measure 'Team Average Points per Game' = DIVIDE([Current Points], [Current Games Played])
+	measure 'Team Average Points per Game' = DIVIDE([Current Points For], [Current Games Played])
 		formatString: #,0.0
 		displayFolder: Standings - Current
+		lineageTag: f47bdcef-b28b-43a7-8a8b-b62b214a95ca
 
 	/// The team currently sitting in position 1 within a single selected competition season. Blank if the filter context spans more than one competition_season_key — position 1 in one season isn't comparable to position 1 in another.
-	measure 'Leading Team' = IF(HASONEVALUE(fact_standings[competition_season_key]), TopEntityByMetric(VALUES(dim_teams[team_key]), [Current Position], dim_teams[team_name], TRUE))
+	measure 'Leading Team' =
+			
+			-- get the teams in scope by using the expanded table to mimic bidirectional filter to the dimension
+			VAR _teams = CALCULATETABLE(dim_teams, fact_standings)
+			RETURN
+			IF(HASONEVALUE(fact_standings[competition_season_key]),
+			   TopEntityByMetric(_teams, [Current Position], dim_teams[team_name], TRUE)
+			)
 		displayFolder: Standings - Leaders
+		lineageTag: b106f542-f8c0-4027-8089-4e63a64d6d82
 
 	/// The team with the highest points-per-game average as of the latest snapshot, within the active filter context. Uses standings points, not game-level scores, to avoid resolving home/away per game.
-	measure 'Team With Highest Average Points per Game' = TopEntityByMetric(VALUES(dim_teams[team_key]), [Team Average Points per Game], dim_teams[team_name], FALSE)
+	measure 'Team With Highest Average Points per Game' =
+			
+			-- get the teams in scope by using the expanded table to mimic bidirectional filter to the dimension
+			VAR _teams = CALCULATETABLE(dim_teams, fact_standings)
+			RETURN
+			TopEntityByMetric(_teams, [Team Average Points per Game], dim_teams[team_name], FALSE())
 		displayFolder: Standings - Leaders
+		lineageTag: f56b3757-f08f-4b28-bdb8-60917a83abba
+
+	measure 'Current Points For' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[points_for]), fact_standings[snapshot_date] = _SnapshotDate)
+		displayFolder: Standings - Current
+		lineageTag: 9d18a3c7-85db-4400-a490-80a8538f6e47
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column standings_key
 		dataType: int64

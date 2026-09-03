@@ -3,16 +3,32 @@ table dim_competitions
 	sourceLineageTag: [gold].[dim_competitions]
 
 	/// The competition with the highest average points scored per game, within the active filter context.
-	measure 'Highest Scoring Competition' = TopEntityByMetric(VALUES(dim_competitions[competition_key]), [Average Points per Game], dim_competitions[competition_name], FALSE)
+	measure 'Highest Scoring Competition' =
+			
+			-- get the competitions in scope by using the expanded table to mimic bidirectional filter to the dimension
+			VAR _comps = CALCULATETABLE(dim_competitions, fact_games)
+			RETURN
+			TopEntityByMetric(_comps, [Average Points per Game], dim_competitions[competition_name], FALSE)
 		displayFolder: League Leaders
+		lineageTag: 7eaae393-2524-4045-9f5c-08a093fb276e
 
 	/// The competition with the lowest average points scored per game, within the active filter context.
-	measure 'Lowest Scoring Competition' = TopEntityByMetric(VALUES(dim_competitions[competition_key]), [Average Points per Game], dim_competitions[competition_name], TRUE)
+	measure 'Lowest Scoring Competition' =
+			
+			-- get the competitions in scope by using the expanded table to mimic bidirectional filter to the dimension
+			VAR _comps = CALCULATETABLE(dim_competitions, fact_games)
+			RETURN TopEntityByMetric(_comps, [Average Points per Game], dim_competitions[competition_name], TRUE)
 		displayFolder: League Leaders
+		lineageTag: 3ed9f06b-d531-4d95-8601-dad44fcf08f9
 
 	/// The competition with the lowest average winning margin (i.e. the closest games), within the active filter context.
-	measure 'Competition With Lowest Average Margin' = TopEntityByMetric(VALUES(dim_competitions[competition_key]), [Average Winning Margin], dim_competitions[competition_name], TRUE)
+	measure 'Competition With Lowest Average Margin' =
+			
+			-- get the competitions in scope by using the expanded table to mimic bidirectional filter to the dimension
+			VAR _comps = CALCULATETABLE(dim_competitions, fact_games)
+			 return TopEntityByMetric(_comps, [Average Winning Margin], dim_competitions[competition_name], TRUE())
 		displayFolder: League Leaders
+		lineageTag: 4843eb7c-79ff-4c67-b7ad-c4a4f7708037
 
 	column competition_key
 		dataType: int64
