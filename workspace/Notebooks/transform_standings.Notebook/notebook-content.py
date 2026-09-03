@@ -47,8 +47,7 @@ from pyspark.sql import functions as F
 
 #standings silver table is a snapshot fact table (standings as per a point in time)
 
-target_date = "2026-08-11"
-#target_date = current_date()
+target_date = current_date()
 
 bronze_df = spark.table("bronze.standings")
 

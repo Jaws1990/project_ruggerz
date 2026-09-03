@@ -66,8 +66,7 @@ HASH_COLUMNS = [
 
 # CELL ********************
 
-target_date = "2026-08-14"
-#target_date = current_date()
+target_date = current_date()
 
 bronze_df = spark.table("bronze.teams")
 
@@ -85,7 +84,7 @@ silver_df = (
         F.col("arena.name").alias("arena_name"),
         F.col("country.id").cast("int").alias("country_id"),
     )
-    .withColumn("row_hash", F.sha2(F.concat_ws("||\, *[F.col(c) for c in HASH_COLUMNS]), 256))
+    .withColumn("row_hash", F.sha2(F.concat_ws("||", *[F.col(c) for c in HASH_COLUMNS]), 256))
     .dropDuplicates()
 )
 
