@@ -104,6 +104,19 @@ table fact_standings
 		displayFolder: Standings - Movement
 		lineageTag: d7bb84bb-6f51-4af2-8b07-aa6ecc3fcae1
 
+	/// Points scored per game by a single team as of the latest snapshot — not the combined score of both sides in a fixture.
+	measure 'Team Average Points per Game' = DIVIDE([Current Points], [Current Games Played])
+		formatString: #,0.0
+		displayFolder: Standings - Current
+
+	/// The team currently sitting in position 1 within a single selected competition season. Blank if the filter context spans more than one competition_season_key — position 1 in one season isn't comparable to position 1 in another.
+	measure 'Leading Team' = IF(HASONEVALUE(fact_standings[competition_season_key]), TopEntityByMetric(VALUES(dim_teams[team_key]), [Current Position], dim_teams[team_name], TRUE))
+		displayFolder: Standings - Leaders
+
+	/// The team with the highest points-per-game average as of the latest snapshot, within the active filter context. Uses standings points, not game-level scores, to avoid resolving home/away per game.
+	measure 'Team With Highest Average Points per Game' = TopEntityByMetric(VALUES(dim_teams[team_key]), [Team Average Points per Game], dim_teams[team_name], FALSE)
+		displayFolder: Standings - Leaders
+
 	column standings_key
 		dataType: int64
 		formatString: 0

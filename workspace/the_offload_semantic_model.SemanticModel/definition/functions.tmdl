@@ -1,0 +1,13 @@
+/// Returns the value of ReturnColumn for the single row of SourceTable that ranks first by SortExpression — Ascending = TRUE for "lowest wins" metrics (e.g. lowest average margin), FALSE for "highest wins" metrics (e.g. highest points).
+function TopEntityByMetric = ```
+		TopEntityByMetric(
+			SourceTable: Table,
+			SortExpression: Scalar Expr,
+			ReturnColumn: AnyRef,
+			Ascending: Scalar Boolean
+		) =
+		CALCULATE(
+			SELECTEDVALUE(ReturnColumn),
+			TOPN(1, SourceTable, SortExpression, IF(Ascending, ASC, DESC))
+		)
+		```

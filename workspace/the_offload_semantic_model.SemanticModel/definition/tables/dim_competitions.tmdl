@@ -2,6 +2,18 @@ table dim_competitions
 	lineageTag: 470aa566-8616-49ea-90b3-e85169d88a24
 	sourceLineageTag: [gold].[dim_competitions]
 
+	/// The competition with the highest average points scored per game, within the active filter context.
+	measure 'Highest Scoring Competition' = TopEntityByMetric(VALUES(dim_competitions[competition_key]), [Average Points per Game], dim_competitions[competition_name], FALSE)
+		displayFolder: League Leaders
+
+	/// The competition with the lowest average points scored per game, within the active filter context.
+	measure 'Lowest Scoring Competition' = TopEntityByMetric(VALUES(dim_competitions[competition_key]), [Average Points per Game], dim_competitions[competition_name], TRUE)
+		displayFolder: League Leaders
+
+	/// The competition with the lowest average winning margin (i.e. the closest games), within the active filter context.
+	measure 'Competition With Lowest Average Margin' = TopEntityByMetric(VALUES(dim_competitions[competition_key]), [Average Winning Margin], dim_competitions[competition_name], TRUE)
+		displayFolder: League Leaders
+
 	column competition_key
 		dataType: int64
 		formatString: 0
