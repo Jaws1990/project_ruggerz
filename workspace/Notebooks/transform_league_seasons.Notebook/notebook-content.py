@@ -60,6 +60,12 @@ silver_df = (
         F.col("league_seasons.start").cast("date").alias("start_date"),
         F.col("league_seasons.end").cast("date").alias("end_date"),
     )
+    .groupBy(["league_id","season"])
+    .agg(
+        F.max("is_current").alias("is_current"),
+        F.max("start_date").alias("start_date"),
+        F.max("end_date").alias("end_date") 
+    )
 )
 
 display(silver_df.limit(10))

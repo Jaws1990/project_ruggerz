@@ -21,7 +21,7 @@
   "command": {
     "operation": "run",
     "arguments": {
-      "select": "dim_game_dates dim_snapshot_dates dim_dates",
+      "select": "bridge_game_team dim_dates dim_game_dates dim_snapshot_dates fact_games",
       "failFast": true,
       "threads": 4
     }
