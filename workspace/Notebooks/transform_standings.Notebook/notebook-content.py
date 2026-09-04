@@ -33,7 +33,7 @@
 
 # CELL ********************
 
-from datetime import datetime
+from datetime import date
 from pyspark.sql import functions as F
 
 # METADATA ********************
@@ -47,7 +47,7 @@ from pyspark.sql import functions as F
 
 #standings silver table is a snapshot fact table (standings as per a point in time)
 
-target_date = current_date()
+target_date = date.today()
 
 bronze_df = spark.table("bronze.standings")
 

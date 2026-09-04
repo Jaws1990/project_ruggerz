@@ -124,7 +124,7 @@ class APIIngestor:
         table_path = f"bronze.{table_name}"
 
         if mode == "merge":
-            if spark.catalog.tableExists("table_path"):
+            if spark.catalog.tableExists(table_path):
                 delta_table = DeltaTable.forName(spark, table_path)
                 (
                     delta_table.alias("target")

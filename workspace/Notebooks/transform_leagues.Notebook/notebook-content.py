@@ -33,7 +33,7 @@
 
 # CELL ********************
 
-from datetime import datetime
+from datetime import date
 from pyspark.sql import functions as F
 
 # METADATA ********************
@@ -57,7 +57,7 @@ HASH_COLUMNS = ["league_name", "league_type", "logo", "country_id"]
 
 # CELL ********************
 
-target_date = current_date()
+target_date = date.today()
 
 bronze_df = spark.table("bronze.leagues")
 
