@@ -72,7 +72,7 @@ ENDPOINT = "games"
 ENTITY = "games"
 DATESTAMP = datetime.now().strftime("%Y%m%d")
 FILENAME = f"{ENTITY}.json"
-SEASON = variable_library.getVariable("season")
+SEASONS = [s.strip() for s in variable_library.getVariable("season").split(",")]
 ingestor = APIIngestor()
 
 # METADATA ********************
@@ -86,10 +86,11 @@ ingestor = APIIngestor()
 
 for league in league_ids:
     league_name = league["name"]
-    output_path = f"Files/raw/{ENTITY}/{DATESTAMP}/{league_name}/{SEASON}"
-    ingestor.download_json(ENDPOINT, output_path, FILENAME, query_params={"league":league["id"],"season":SEASON})
-    #pause so we dont go over request per minute limit
-    sleep(7)
+    for season in SEASONS:
+        output_path = f"Files/raw/{ENTITY}/{DATESTAMP}/{league_name}/{season}"
+        ingestor.download_json(ENDPOINT, output_path, FILENAME, query_params={"league":league["id"],"season":season})
+        #pause so we dont go over request per minute limit
+        sleep(7)
 
 # METADATA ********************
 

@@ -72,7 +72,9 @@ ENDPOINT = "teams"
 ENTITY = "teams"
 DATESTAMP = datetime.now().strftime("%Y%m%d")
 FILENAME = f"{ENTITY}.json"
-SEASON = variable_library.getVariable("season")
+SEASONS = [s.strip() for s in variable_library.getVariable("season").split(",")]
+# Teams are assumed to remain the same for every season, so we only load once using the first season in the list.
+SEASON = SEASONS[0]
 ingestor = APIIngestor()
 
 # METADATA ********************
