@@ -1,11 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "DataPipeline",
-    "displayName": "pipeline_weekly_elt"
+    "type": "Notebook",
+    "displayName": "lakehouse_pr_table_definitions",
+    "description": ""
   },
   "config": {
     "version": "2.0",
-    "logicalId": "28605f00-f4b3-92d4-4d1c-96731e2947e1"
+    "logicalId": "9fc8b0cd-4bee-bfab-4eb5-7a4ac7846395"
   }
 }

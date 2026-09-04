@@ -1,0 +1,40 @@
+table bridge_game_team
+	lineageTag: 39814e65-a4e0-4b91-a050-0297b1f8a5d1
+	sourceLineageTag: [gold].[bridge_game_team]
+
+	column game_key
+		dataType: int64
+		formatString: 0
+		lineageTag: bbcb2e20-bfa7-4cfb-a30e-101270d77a2b
+		sourceLineageTag: game_key
+		summarizeBy: none
+		sourceColumn: game_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column team_key
+		dataType: int64
+		formatString: 0
+		lineageTag: d1198c8e-43bc-4350-8494-cd8fb0410f8a
+		sourceLineageTag: team_key
+		summarizeBy: none
+		sourceColumn: team_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column team_role
+		dataType: string
+		lineageTag: c6e83d55-93c5-4e9f-bdd1-bcb81a0e3172
+		sourceLineageTag: team_role
+		summarizeBy: none
+		sourceColumn: team_role
+
+		annotation SummarizationSetBy = Automatic
+
+	partition bridge_game_team = entity
+		mode: directLake
+		source
+			entityName: bridge_game_team
+			schemaName: gold
+			expressionSource: 'DirectLake - lakehouse_pr'
+
