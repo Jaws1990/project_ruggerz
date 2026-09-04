@@ -1,0 +1,126 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 400,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 528.57142857142856,
+            "y": 872.69387755102036
+          },
+          "nodeIndex": "dim_competition_seasons",
+          "nodeLineageTag": "2da0d995-3202-4767-81c9-67b194c06de6",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 1039.1020408163267,
+            "y": 862.9795918367347
+          },
+          "nodeIndex": "dim_competitions",
+          "nodeLineageTag": "470aa566-8616-49ea-90b3-e85169d88a24",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 848.73469387755142,
+            "y": 5.7142857142857153
+          },
+          "nodeIndex": "dim_teams",
+          "nodeLineageTag": "933be460-72e6-4c82-9882-0395d7734dec",
+          "size": {
+            "height": 391.42857142857144,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1106.4081632653063,
+            "y": 453.87755102040836
+          },
+          "nodeIndex": "fact_games",
+          "nodeLineageTag": "51a27f3e-d70b-4f60-a896-46058b5ed536",
+          "size": {
+            "height": 336.73469387755097,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 557.75510204081615,
+            "y": 422.85714285714295
+          },
+          "nodeIndex": "fact_standings",
+          "nodeLineageTag": "295ad5da-6707-47b9-b537-7895efbd5b4e",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 1111.8367346938774,
+            "y": 204.34693877551021
+          },
+          "nodeIndex": "bridge_game_team",
+          "nodeLineageTag": "39814e65-a4e0-4b91-a050-0297b1f8a5d1",
+          "size": {
+            "height": 170.57142857142856,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 1432.9795918367345,
+            "y": 453.77551020408163
+          },
+          "nodeIndex": "dim_game_dates",
+          "nodeLineageTag": "370567f0-bc77-4a96-8400-28fdd513d98e",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 231.26530612244869,
+            "y": 423.77551020408163
+          },
+          "nodeIndex": "dim_snapshot_dates",
+          "nodeLineageTag": "4db19f08-e8ed-4fbe-9d1a-ea52b8b9bfea",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 3
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 70,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

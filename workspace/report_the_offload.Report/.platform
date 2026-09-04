@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "report_the_offload"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "1496bacd-5f55-49c9-bfd8-0e09a4ea830c"
+  }
+}

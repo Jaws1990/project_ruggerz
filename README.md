@@ -41,6 +41,41 @@ Silver table schemas (`CREATE TABLE IF NOT EXISTS` DDL) live in a single version
 
 A deliberate learning choice, not a "best tool for the job" call — this project is also about building dbt fluency for the CV. Silver already performs its own change-tracking (hand-rolled PySpark MERGE for SCD2), so dbt's job in Gold is narrower than textbook: it adds surrogate keys and builds the star schema on top of already-historicised Silver tables, rather than owning history itself. dbt snapshots are intentionally not used here for that reason.
 
+## Gold layer (dbt) — design decisions
+
+**Schema:** Galaxy/fact constellation — `fact_games` + `fact_standings` share `dim_competitions` (was `leagues`), `dim_dates`, `dim_teams` (country denormalized as an attribute).
+
+**Home/away pattern:**
+- `fact_games.home_team_key` / `away_team_key` both → `dim_teams` (role-playing dimension)
+
+**Surrogate keys:** `xxhash64()`, not `ROW_NUMBER()`/identity columns — deterministic, integer to help with Power BI relationships.
+
+| Dimension | Key basis | Why |
+|---|---|---|
+| `dim_teams`, `dim_competitions` (SCD2) | `xxhash64(natural_key, valid_from, row_hash)` | disambiguates versions |
+| `dim_competition_seasons` (SCD1) | `xxhash64(natural_key)` | no versions to disambiguate |
+| `dim_dates` | `date_day` itself | already unique, no hash needed |
+
+**As-of join** (SCD2 dims → facts):
+```sql
+event_date >= valid_from AND event_date < valid_to
+```
+`competition_seasons` resolved via plain join (not inline hash) — enforces referential integrity, testable.
+
+**`dim_dates`:** built with `dbt_utils.date_spine()`, rolling end = `current_date() + 1 year`, this is the parent dataset for both the `dim_game_dates` and `dim_snapshot_dates` tables. It is never persisted to the lakehouse. 2 separate date tables for user simplicity rather than being a role playing date dimension table. 2 physical tables chosen because we are using direct lake and low storage impact. 
+
+**Materialization:**
+
+| Table | Materialization | Why |
+|---|---|---|
+| `dim_team`, `dim_competition`, `dim_league_season`, `dim_date` | `table` | small, deterministic keys, no state to preserve |
+| `fact_games` | `incremental`, `unique_key='id'`, `merge`, filtered on `processed_at` | grows continuously, rows get updated post-load |
+
+**Naming:** natural key kept as `_id` (traceable attribute, not a join key); surrogate is `_key`. No third `_nk` suffix — existing two-suffix convention already disambiguates.
+
+**Testing:**
+- tbc
+
 ## To-do
 
 - [x] Source/API research and entity hierarchy mapping
@@ -51,16 +86,16 @@ A deliberate learning choice, not a "best tool for the job" call — this projec
 - [x] Silver schemas notebook (DDL for tables built so far)
 - [x] Silver transform: `leagues` (SCD2), `league_seasons` (SCD1)
 - [x] Silver transform: `teams` (SCD2), `team_leagues` (bridge)
-- [ ] Silver transform: `countries` (SCD1)
-- [ ] Silver transform: `standings` (periodic snapshot)
-- [ ] Silver transform: `games` (fact table)
-- [ ] Shared utility module (`scd2_merge`, `scd1_merge`, `snapshot_append`)
+- [x] Silver transform: `countries` (SCD1)
+- [x] Silver transform: `standings` (periodic snapshot)
+- [x] Silver transform: `games` (fact table)
+- [x] Shared utility module (`scd2_merge`, `upsert`)
 - [ ] Fabric Data Pipelines — orchestration and scheduling for all notebooks
 - [x] Fabric variable library — season parameter
 - [x] Lakehouse CSV — league scope config
-- [ ] dbt-fabric project setup, connected to Silver
-- [ ] Gold: dimension models with surrogate keys
-- [ ] Gold: fact models (games, standings)
+- [x] dbt-fabric project setup, connected to Silver
+- [x] Gold: dimension models with surrogate keys
+- [x] Gold: fact models (games, standings)
 - [ ] Power BI semantic model
 - [ ] Power BI report
 

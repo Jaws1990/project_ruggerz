@@ -1,0 +1,73 @@
+table dim_competition_seasons
+	lineageTag: 2da0d995-3202-4767-81c9-67b194c06de6
+	sourceLineageTag: [gold].[dim_competition_seasons]
+
+	column competition_season_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 974f580a-464d-4020-9d55-d2ae0fe2ab36
+		sourceLineageTag: competition_season_key
+		summarizeBy: none
+		sourceColumn: competition_season_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column competition_id
+		dataType: int64
+		formatString: 0
+		lineageTag: d2e11c93-e89b-44b3-bea6-e0c893536581
+		sourceLineageTag: competition_id
+		summarizeBy: sum
+		sourceColumn: competition_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column season
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e0ae664-9b04-4f98-8368-0be17ae39788
+		sourceLineageTag: season
+		summarizeBy: none
+		sourceColumn: season
+
+		changedProperty = SummarizeBy
+
+		annotation SummarizationSetBy = User
+
+	column is_current
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 893f1282-bac1-4ab7-8caa-3c6b278dd096
+		sourceLineageTag: is_current
+		summarizeBy: none
+		sourceColumn: is_current
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0169f021-3b26-4eb6-aced-bf9e34f7a22e
+		sourceLineageTag: start_date
+		summarizeBy: none
+		sourceColumn: start_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fe274fac-73f9-4edd-85a1-e299b2b2ddd2
+		sourceLineageTag: end_date
+		summarizeBy: none
+		sourceColumn: end_date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_competition_seasons = entity
+		mode: directLake
+		source
+			entityName: dim_competition_seasons
+			schemaName: gold
+			expressionSource: 'DirectLake - lakehouse_pr'
+

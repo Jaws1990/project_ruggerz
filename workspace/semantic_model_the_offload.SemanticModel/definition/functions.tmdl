@@ -1,0 +1,21 @@
+/// Returns the value of ReturnColumn for the single row of SourceTable that ranks first by SortExpression — Ascending = TRUE for "lowest wins" metrics (e.g. lowest average margin), FALSE for "highest wins" metrics (e.g. highest points).
+function TopEntityByMetric =
+		(
+			SourceTable: Table,
+			SortExpression: Scalar Variant EXPR,
+			ReturnColumn: ColumnRef,
+			Ascending: Scalar Boolean VAL
+		) =>
+		IF(
+			Ascending,
+			CALCULATE(
+				MAX(ReturnColumn),
+				TOPN(1, FILTER(SourceTable, NOT ISBLANK(SortExpression)), SortExpression, ASC)
+			),
+			CALCULATE(
+				MAX(ReturnColumn),
+				TOPN(1, FILTER(SourceTable, NOT ISBLANK(SortExpression)), SortExpression, DESC)
+			)
+		)
+	lineageTag: fe1f8299-e69b-4c92-ac85-6a1dabb4e4e5
+
