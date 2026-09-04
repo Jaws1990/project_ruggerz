@@ -5,7 +5,7 @@
     "x": 0,
     "y": 0,
     "z": 0,
-    "height": 1073,
+    "height": 1080,
     "width": 200,
     "tabOrder": 0
   },
@@ -192,6 +192,19 @@
         {
           "properties": {
             "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "keepLayerOrder": {
               "expr": {
                 "Literal": {
                   "Value": "false"

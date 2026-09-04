@@ -114,7 +114,7 @@
                           [
                             {
                               "Literal": {
-                                "Value": "'Six Nations'"
+                                "Value": "'Premiership Rugby'"
                               }
                             }
                           ]
@@ -158,7 +158,7 @@
                         },
                         "Right": {
                           "Literal": {
-                            "Value": "'six na'"
+                            "Value": "'prem'"
                           }
                         }
                       }

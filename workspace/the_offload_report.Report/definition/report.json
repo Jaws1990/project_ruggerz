@@ -40,6 +40,11 @@
     }
   ],
   "settings": {
-    "useEnhancedTooltips": false
+    "hideVisualContainerHeader": true,
+    "useStylableVisualContainerHeader": true,
+    "useEnhancedTooltips": false,
+    "queryLimitOption": "None",
+    "customMemoryLimit": "1048576",
+    "customTimeoutLimit": "225"
   }
 }

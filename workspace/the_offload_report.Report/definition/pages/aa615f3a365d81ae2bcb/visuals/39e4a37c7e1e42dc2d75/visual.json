@@ -5,33 +5,14 @@
     "x": 224.17927315584689,
     "y": 279.72811960154348,
     "z": 5000,
-    "height": 771.7321881205703,
+    "height": 500,
     "width": 962.18537593438714,
     "tabOrder": 5000
   },
   "visual": {
-    "visualType": "pivotTable",
+    "visualType": "tableEx",
     "query": {
       "queryState": {
-        "Rows": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "dim_teams"
-                    }
-                  },
-                  "Property": "team_name"
-                }
-              },
-              "queryRef": "dim_teams.team_name",
-              "nativeQueryRef": "team_name",
-              "active": true
-            }
-          ]
-        },
         "Values": {
           "projections": [
             {
@@ -46,7 +27,38 @@
                 }
               },
               "queryRef": "fact_standings.Current Position",
-              "nativeQueryRef": "Current Position"
+              "nativeQueryRef": "#",
+              "displayName": "#"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_teams"
+                    }
+                  },
+                  "Property": "logo"
+                }
+              },
+              "queryRef": "dim_teams.logo",
+              "nativeQueryRef": " ",
+              "displayName": " "
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_teams"
+                    }
+                  },
+                  "Property": "team_name"
+                }
+              },
+              "queryRef": "dim_teams.team_name",
+              "nativeQueryRef": "Team",
+              "displayName": "Team"
             },
             {
               "field": {
@@ -60,7 +72,8 @@
                 }
               },
               "queryRef": "fact_standings.Current Points",
-              "nativeQueryRef": "Current Points"
+              "nativeQueryRef": "Pts",
+              "displayName": "Pts"
             },
             {
               "field": {
@@ -74,49 +87,68 @@
                 }
               },
               "queryRef": "fact_standings.Current Games Played",
-              "nativeQueryRef": "Current Games Played"
+              "nativeQueryRef": "P",
+              "displayName": "P"
             },
             {
               "field": {
-                "Measure": {
+                "Aggregation": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_standings"
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "fact_standings"
+                        }
+                      },
+                      "Property": "games_won"
                     }
                   },
-                  "Property": "Current Win %"
+                  "Function": 0
                 }
               },
-              "queryRef": "fact_standings.Current Win %",
-              "nativeQueryRef": "Current Win %"
+              "queryRef": "Sum(fact_standings.games_won)",
+              "nativeQueryRef": "W",
+              "displayName": "W"
             },
             {
               "field": {
-                "Measure": {
+                "Aggregation": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_standings"
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "fact_standings"
+                        }
+                      },
+                      "Property": "games_drawn"
                     }
                   },
-                  "Property": "Current Draw %"
+                  "Function": 0
                 }
               },
-              "queryRef": "fact_standings.Current Draw %",
-              "nativeQueryRef": "Current Draw %"
+              "queryRef": "Sum(fact_standings.games_drawn)",
+              "nativeQueryRef": "D",
+              "displayName": "D"
             },
             {
               "field": {
-                "Measure": {
+                "Aggregation": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "fact_standings"
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "fact_standings"
+                        }
+                      },
+                      "Property": "games_lost"
                     }
                   },
-                  "Property": "Current Loss %"
+                  "Function": 0
                 }
               },
-              "queryRef": "fact_standings.Current Loss %",
-              "nativeQueryRef": "Current Loss %"
+              "queryRef": "Sum(fact_standings.games_lost)",
+              "nativeQueryRef": "L",
+              "displayName": "L"
             },
             {
               "field": {
@@ -130,7 +162,8 @@
                 }
               },
               "queryRef": "fact_standings.Current Points For",
-              "nativeQueryRef": "Current Points For"
+              "nativeQueryRef": "F",
+              "displayName": "F"
             },
             {
               "field": {
@@ -140,11 +173,27 @@
                       "Entity": "fact_standings"
                     }
                   },
-                  "Property": "Team Average Points per Game"
+                  "Property": "Current Points Against"
                 }
               },
-              "queryRef": "fact_standings.Team Average Points per Game",
-              "nativeQueryRef": "Team Average Points per Game"
+              "queryRef": "fact_standings.Current Points Against",
+              "nativeQueryRef": "A",
+              "displayName": "A"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_standings"
+                    }
+                  },
+                  "Property": "Team Form SVG"
+                }
+              },
+              "queryRef": "fact_standings.Team Form SVG",
+              "nativeQueryRef": "Form",
+              "displayName": "Form"
             }
           ]
         }
@@ -164,8 +213,7 @@
             },
             "direction": "Ascending"
           }
-        ],
-        "isDefaultSort": true
+        ]
       }
     },
     "objects": {
@@ -207,32 +255,18 @@
                   }
                 }
               }
-            }
-          }
-        }
-      ],
-      "rowHeaders": [
-        {
-          "properties": {
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#EDEDED'"
-                    }
-                  }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
                 }
               }
             },
-            "backColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#262A33'"
-                    }
-                  }
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }
@@ -285,7 +319,233 @@
                   }
                 }
               }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            },
+            "urlIcon": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
             }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "40.18611951850036D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_standings.Current Position"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "149.76763024904523D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dim_teams.logo"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "248.30912201075705D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dim_teams.team_name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_standings.Current Points"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_standings.Current Games Played"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(fact_standings.games_won)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(fact_standings.games_drawn)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Sum(fact_standings.games_lost)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_standings.Current Points For"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_standings.Current Points Against"
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "imageHeight": {
+              "expr": {
+                "Literal": {
+                  "Value": "60D"
+                }
+              }
+            },
+            "imageWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "110D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnFormatting": [
+        {
+          "properties": {
+            "styleHeader": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_standings.Current Position"
+          }
+        },
+        {
+          "properties": {
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Center'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "dim_teams.logo"
           }
         }
       ]

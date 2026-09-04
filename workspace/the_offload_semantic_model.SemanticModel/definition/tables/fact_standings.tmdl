@@ -30,22 +30,32 @@ table fact_standings
 		lineageTag: d3d29b25-f940-44b4-a035-a68a76a5095f
 
 	/// Season win rate as of the latest snapshot.
-	measure 'Current Win %' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[won_percentage]), fact_standings[snapshot_date] = _SnapshotDate)
-		formatString: 0%
+	measure 'Current Win %' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[won_percentage]), fact_standings[snapshot_date] = _SnapshotDate) * 0.01
+		formatString: 0%;-0%;0%
 		displayFolder: Standings - Current
 		lineageTag: fe38eea2-8ce6-44e5-9b7c-c0d1ac7a1859
 
+		changedProperty = FormatString
+
 	/// Season draw rate as of the latest snapshot.
-	measure 'Current Draw %' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[drawn_percentage]), fact_standings[snapshot_date] = _SnapshotDate)
-		formatString: 0%
+	measure 'Current Draw %' = ```
+			
+			VAR _SnapshotDate = [Latest Snapshot Date] 
+			RETURN CALCULATE(AVERAGE(fact_standings[drawn_percentage]), fact_standings[snapshot_date] = _SnapshotDate) * 0.01
+			```
+		formatString: 0%;-0%;0%
 		displayFolder: Standings - Current
 		lineageTag: 57b396f3-71d5-4fe9-b79f-1c1ced977c84
 
+		changedProperty = FormatString
+
 	/// Season loss rate as of the latest snapshot.
-	measure 'Current Loss %' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[lost_percentage]), fact_standings[snapshot_date] = _SnapshotDate)
-		formatString: 0%
+	measure 'Current Loss %' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[lost_percentage]), fact_standings[snapshot_date] = _SnapshotDate) * 0.01
+		formatString: 0%;-0%;0%
 		displayFolder: Standings - Current
 		lineageTag: f2987d65-bbd8-4aa2-8f34-49755fb00621
+
+		changedProperty = FormatString
 
 	/// Target date exactly one week before the latest snapshot — the point Weekly movement measures compare against. Not necessarily a real snapshot date; see 'Previous Snapshot Date (Weekly)'.
 	measure 'Weekly Comparison Date' = [Latest Snapshot Date] - 7
@@ -136,6 +146,7 @@ table fact_standings
 		lineageTag: f56b3757-f08f-4b28-bdb8-60917a83abba
 
 	measure 'Current Points For' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[points_for]), fact_standings[snapshot_date] = _SnapshotDate)
+		formatString: 0
 		displayFolder: Standings - Current
 		lineageTag: 9d18a3c7-85db-4400-a490-80a8538f6e47
 
@@ -143,7 +154,79 @@ table fact_standings
 
 		changedProperty = Name
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		changedProperty = FormatString
+
+	measure 'Current Points Against' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[points_against]), fact_standings[snapshot_date] = _SnapshotDate)
+		formatString: 0
+		displayFolder: Standings - Current
+		lineageTag: 1051e3df-7bcc-418d-9f10-2693dda5aa34
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Team Form SVG' = ```
+			
+			VAR _SnapshotDate = [Latest Snapshot Date]
+			VAR _Form =
+			    CALCULATE(
+			        SELECTEDVALUE( fact_standings[form] ),
+			        fact_standings[snapshot_date] = _SnapshotDate
+			    )
+			VAR _F = RIGHT( _Form, 5 )
+			VAR _Len = LEN( _F )
+			VAR _C1 = MID( _F, 1, 1 )
+			VAR _C2 = MID( _F, 2, 1 )
+			VAR _C3 = MID( _F, 3, 1 )
+			VAR _C4 = MID( _F, 4, 1 )
+			VAR _C5 = MID( _F, 5, 1 )
+			VAR _RectAttrs = """ y=""0"" width=""17"" height=""17"" rx=""3"" ry=""3"" fill="""
+			VAR _TextAttrs = """ y=""12"" text-anchor=""middle"" font-family=""Segoe UI, system-ui, sans-serif"" font-size=""9"" font-weight=""700"" fill="""
+			VAR _B1 =
+			    IF( _C1 = "", "",
+			        "<rect x=""0" & _RectAttrs & SWITCH( _C1, "W", "rgb(95,184,138)", "L", "rgb(214,69,65)", "rgb(158,158,158)" ) & """/>"
+			            & "<text x=""8.5" & _TextAttrs & IF( _C1 = "W", "rgb(13,31,22)", "rgb(255,255,255)" ) & """>" & _C1 & "</text>"
+			    )
+			VAR _B2 =
+			    IF( _C2 = "", "",
+			        "<rect x=""19" & _RectAttrs & SWITCH( _C2, "W", "rgb(95,184,138)", "L", "rgb(214,69,65)", "rgb(158,158,158)" ) & """/>"
+			            & "<text x=""27.5" & _TextAttrs & IF( _C2 = "W", "rgb(13,31,22)", "rgb(255,255,255)" ) & """>" & _C2 & "</text>"
+			    )
+			VAR _B3 =
+			    IF( _C3 = "", "",
+			        "<rect x=""38" & _RectAttrs & SWITCH( _C3, "W", "rgb(95,184,138)", "L", "rgb(214,69,65)", "rgb(158,158,158)" ) & """/>"
+			            & "<text x=""46.5" & _TextAttrs & IF( _C3 = "W", "rgb(13,31,22)", "rgb(255,255,255)" ) & """>" & _C3 & "</text>"
+			    )
+			VAR _B4 =
+			    IF( _C4 = "", "",
+			        "<rect x=""57" & _RectAttrs & SWITCH( _C4, "W", "rgb(95,184,138)", "L", "rgb(214,69,65)", "rgb(158,158,158)" ) & """/>"
+			            & "<text x=""65.5" & _TextAttrs & IF( _C4 = "W", "rgb(13,31,22)", "rgb(255,255,255)" ) & """>" & _C4 & "</text>"
+			    )
+			VAR _B5 =
+			    IF( _C5 = "", "",
+			        "<rect x=""76" & _RectAttrs & SWITCH( _C5, "W", "rgb(95,184,138)", "L", "rgb(214,69,65)", "rgb(158,158,158)" ) & """/>"
+			            & "<text x=""84.5" & _TextAttrs & IF( _C5 = "W", "rgb(13,31,22)", "rgb(255,255,255)" ) & """>" & _C5 & "</text>"
+			    )
+			VAR _W = _Len * 19 - 2
+			VAR _SVG =
+			    "<svg xmlns=""http://www.w3.org/2000/svg"" width=""" & _W & """ height=""17"" viewBox=""0 0 " & _W & " 17"">"
+			        & _B1 & _B2 & _B3 & _B4 & _B5
+			        & "</svg>"
+			RETURN
+			    IF( _Len = 0, BLANK(), "data:image/svg+xml;utf8," & _SVG )
+			
+			```
+		displayFolder: Standings - Current
+		lineageTag: 85a5cfc8-6731-4525-aadd-6cb8b5b56a00
+		dataCategory: ImageUrl
+
+		changedProperty = DisplayFolder
+
+		changedProperty = Name
+
+		changedProperty = DataCategory
 
 	column standings_key
 		dataType: int64

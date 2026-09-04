@@ -5,7 +5,7 @@
     "x": 1218.1068470592036,
     "y": 279.72811960154348,
     "z": 6000,
-    "height": 783.63551235893385,
+    "height": 500,
     "width": 678.48948158672249,
     "tabOrder": 6000
   },
@@ -27,8 +27,9 @@
                 }
               },
               "queryRef": "fact_games.game_week",
-              "nativeQueryRef": "game_week",
-              "active": true
+              "nativeQueryRef": "Round",
+              "active": true,
+              "displayName": "Round"
             }
           ]
         },
@@ -336,6 +337,13 @@
               "expr": {
                 "Literal": {
                   "Value": "14D"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Average Points per Game by Round'"
                 }
               }
             }
