@@ -4,8 +4,8 @@
     {
       "name": "season",
       "note": "",
-      "type": "Integer",
-      "value": 2024
+      "type": "String",
+      "value": "2025"
     },
     {
       "name": "api_base_url",
