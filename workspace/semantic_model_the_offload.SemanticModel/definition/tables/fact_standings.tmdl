@@ -228,6 +228,30 @@ table fact_standings
 
 		changedProperty = DataCategory
 
+	measure 'Current Wins' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[games_won]), fact_standings[snapshot_date] = _SnapshotDate)
+		formatString: 0
+		lineageTag: 917d8680-5f75-4d89-a7f8-a36b2e4d4d7e
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Current Losses' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[games_lost]), fact_standings[snapshot_date] = _SnapshotDate)
+		formatString: 0
+		lineageTag: 417bd541-64f3-4759-b6f5-aaab37bcafb9
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
+	measure 'Current Draws' = VAR _SnapshotDate = [Latest Snapshot Date] RETURN CALCULATE(AVERAGE(fact_standings[games_drawn]), fact_standings[snapshot_date] = _SnapshotDate)
+		formatString: 0
+		lineageTag: 5555f3e4-0f9c-45e4-bade-00f4fb9e863e
+
+		changedProperty = Name
+
+		changedProperty = FormatString
+
 	column standings_key
 		dataType: int64
 		formatString: 0

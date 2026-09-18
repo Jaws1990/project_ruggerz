@@ -250,34 +250,42 @@ table fact_games
 
 		annotation SummarizationSetBy = Automatic
 
-	/// Home team's name as of the game's kick-off date (resolved via dim_teams temporal join at ETL time).
 	column home_team_name
 		dataType: string
-		lineageTag: 99f1b278-774e-4c41-9406-f57c3b420091
+		lineageTag: eb9b2d0f-1702-4ec1-855d-adb01aa6ceba
+		sourceLineageTag: home_team_name
 		summarizeBy: none
 		sourceColumn: home_team_name
 
-	/// Away team's name as of the game's kick-off date (resolved via dim_teams temporal join at ETL time).
+		annotation SummarizationSetBy = Automatic
+
 	column away_team_name
 		dataType: string
-		lineageTag: 4d410428-f12c-49db-be30-04cccb014346
+		lineageTag: 1eba72b9-5527-4fcc-bdc1-dabf39b46909
+		sourceLineageTag: away_team_name
 		summarizeBy: none
 		sourceColumn: away_team_name
 
-	/// Absolute points difference between home and away score. Blank if the game hasn't been played yet.
+		annotation SummarizationSetBy = Automatic
+
 	column margin
 		dataType: int64
-		formatString: #,0
-		lineageTag: cd3b27cb-af3b-471a-b0e1-b50239bec7b1
-		summarizeBy: none
+		formatString: 0
+		lineageTag: bd8fb578-8cf1-494d-bc19-a788b8ebb3c8
+		sourceLineageTag: margin
+		summarizeBy: sum
 		sourceColumn: margin
 
-	/// 'Home Win', 'Away Win', or 'Draw'. Blank if the game hasn't been played yet (avoids misclassifying future fixtures as draws).
+		annotation SummarizationSetBy = Automatic
+
 	column result
 		dataType: string
-		lineageTag: 153b24ca-0679-4610-b8e0-d8a45ccc6c3d
+		lineageTag: f343497e-265e-41f4-baa5-8c1cb5c054f0
+		sourceLineageTag: result
 		summarizeBy: none
 		sourceColumn: result
+
+		annotation SummarizationSetBy = Automatic
 
 	partition fact_games = entity
 		mode: directLake

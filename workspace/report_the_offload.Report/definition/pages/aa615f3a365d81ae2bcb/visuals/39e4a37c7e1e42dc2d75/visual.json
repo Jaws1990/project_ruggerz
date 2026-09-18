@@ -92,61 +92,46 @@
             },
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "fact_standings"
-                        }
-                      },
-                      "Property": "games_won"
+                    "SourceRef": {
+                      "Entity": "fact_standings"
                     }
                   },
-                  "Function": 0
+                  "Property": "Current Wins"
                 }
               },
-              "queryRef": "Sum(fact_standings.games_won)",
+              "queryRef": "fact_standings.Current Wins",
               "nativeQueryRef": "W",
               "displayName": "W"
             },
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "fact_standings"
-                        }
-                      },
-                      "Property": "games_drawn"
+                    "SourceRef": {
+                      "Entity": "fact_standings"
                     }
                   },
-                  "Function": 0
+                  "Property": "Current Draws"
                 }
               },
-              "queryRef": "Sum(fact_standings.games_drawn)",
+              "queryRef": "fact_standings.Current Draws",
               "nativeQueryRef": "D",
               "displayName": "D"
             },
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "fact_standings"
-                        }
-                      },
-                      "Property": "games_lost"
+                    "SourceRef": {
+                      "Entity": "fact_standings"
                     }
                   },
-                  "Function": 0
+                  "Property": "Current Losses"
                 }
               },
-              "queryRef": "Sum(fact_standings.games_lost)",
+              "queryRef": "fact_standings.Current Losses",
               "nativeQueryRef": "L",
               "displayName": "L"
             },
@@ -419,48 +404,6 @@
           },
           "selector": {
             "metadata": "fact_standings.Current Games Played"
-          }
-        },
-        {
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "50D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "Sum(fact_standings.games_won)"
-          }
-        },
-        {
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "50D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "Sum(fact_standings.games_drawn)"
-          }
-        },
-        {
-          "properties": {
-            "value": {
-              "expr": {
-                "Literal": {
-                  "Value": "50D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "metadata": "Sum(fact_standings.games_lost)"
           }
         },
         {
